@@ -1,6 +1,9 @@
 
 # Weekly Analyst
 
+- Live demo (Hugging Face Space): https://huggingface.co/spaces/ewin-reg/SMTG
+- Pages site with real example reports: https://gpa-n.github.io/weekly-analyst/
+
 An autonomous data analyst for a CSV that is replaced every week, built for the MiniCPM Spark Program (On-Device Agent Challenge).
 It runs MiniCPM-V 4.7 (1B, full precision f16, no quantization) on CPU through llama.cpp.
 
