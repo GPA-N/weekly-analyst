@@ -1,7 +1,7 @@
 
 # Weekly Analyst
 
-- Live demo (Hugging Face Space): https://huggingface.co/spaces/ewin-reg/SMTG
+- Live demo (Hugging Face Space): https://huggingface.co/spaces/ewin-reg/weekly-analyst
 - Pages site with real example reports: https://gpa-n.github.io/weekly-analyst/
 
 An autonomous data analyst for a CSV that is replaced every week, built for the MiniCPM Spark Program (On-Device Agent Challenge).
@@ -22,3 +22,14 @@ Synthetic data only. Nothing is uploaded and the source file is never modified. 
 Click **Code > Codespaces > Create codespace** on this repository. The dev container installs the requirements and starts the Gradio app on port 7860; open the forwarded port. The first run downloads the full precision (f16) MiniCPM-V 4.7 1B GGUF from Hugging Face, about 2 GB, and runs it on CPU.
 
 Locally: `pip install -r requirements.txt && python app.py`.
+
+## Measured limits
+
+Scored replay on 100 holdout sets (one revenue outlier of x1.5 in one region, alert budget 3 per week, gate calibrated on dev seeds only):
+
+- Recall of the injected event: 21 of 100 (0.21, 95% Clopper-Pearson interval 0.13 to 0.30). The bar (lower bound at least 0.80) is not met.
+- Quiet weeks: 28 of 200 raised at least one alert (0.14, interval 0.10 to 0.20).
+
+Raw numbers: `results/replay-holdout-results.json`. Not yet done: injection corpus against the real model, a second person scoring brief quality, the reliability report and the demo video.
+
+The agent uses CUDA when the llama.cpp build supports it (`requirements.cuda.txt`); the default is CPU.

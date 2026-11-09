@@ -1,4 +1,4 @@
-"""Weekly Analyst: hosted demo of an autonomous on-device data analyst (MiniCPM-V 4.7, 1B, f16, CPU only).
+"""Weekly Analyst: hosted demo of an autonomous on-device data analyst (MiniCPM-V 4.7, 1B, f16; CPU, or CUDA when the llama.cpp build supports it).
 
 Synthetic data only. There is no upload path. The agent reads a weekly sales CSV, stays silent when nothing
 changed, and otherwise writes a stakeholder PDF whose every number is recomputed by code. The model only writes
@@ -41,14 +41,48 @@ SCENARIO_LABELS = {
 }
 
 
-def get_client() -> LlamaCppClient:
-    global _client
-    if _client is None:
-        from huggingface_hub import hf_hub_download
+try:  # ZeroGPU Spaces attach a GPU only inside @spaces.GPU calls; anywhere else this is a no-op
+    import spaces
 
-        path = hf_hub_download(MODEL_REPO, MODEL_FILE)
-        _client = LlamaCppClient(Path(path), threads=os.cpu_count() or 2, n_ctx=N_CTX)
+    gpu = spaces.GPU(duration=300)
+except ImportError:
+
+    def gpu(fn):
+        return fn
+
+
+def _model_path() -> str:
+    local = HERE / MODEL_FILE  # the Space repo carries the GGUF, so there is no download on start
+    if local.exists():
+        return str(local)
+    from huggingface_hub import hf_hub_download
+
+    return hf_hub_download(MODEL_REPO, MODEL_FILE)
+
+
+def _gpu_layers() -> int:
+    try:
+        from llama_cpp import llama_supports_gpu_offload
+
+        return -1 if llama_supports_gpu_offload() else 0
+    except ImportError:
+        return 0
+
+
+def get_client() -> LlamaCppClient:
+    """CPU: load once and keep. CUDA: load per run, because a ZeroGPU context ends with the call."""
+    global _client
+    layers = _gpu_layers()
+    if layers:
+        return LlamaCppClient(Path(_model_path()), threads=os.cpu_count() or 2, n_ctx=N_CTX, n_gpu_layers=layers)
+    if _client is None:
+        _client = LlamaCppClient(Path(_model_path()), threads=os.cpu_count() or 2, n_ctx=N_CTX)
     return _client
+
+
+@gpu
+def run_on_device(scenario: str, base: Path) -> DemoRun:
+    return run_demo(scenario, get_client(), base)
 
 
 def page_images(pdf_path: Path, scale: float = 1.2) -> list[str]:
@@ -75,7 +109,7 @@ def run_scenario(label: str):
 
         def work() -> None:
             try:
-                result["demo"] = run_demo(scenario, get_client(), BASE)
+                result["demo"] = run_on_device(scenario, BASE)
             except Exception as err:  # noqa: BLE001 - shown to the visitor, never silent
                 result["error"] = f"{type(err).__name__}: {err}"
 

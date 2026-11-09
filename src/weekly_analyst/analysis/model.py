@@ -11,11 +11,11 @@ class ModelClient(Protocol):
 
 
 class LlamaCppClient:
-    def __init__(self, gguf_path: Path, threads: int, n_ctx: int) -> None:
+    def __init__(self, gguf_path: Path, threads: int, n_ctx: int, n_gpu_layers: int = 0) -> None:
         from llama_cpp import Llama  # lazy: only real runs need llama-cpp-python
 
         self._llm = Llama(
-            model_path=str(gguf_path), n_threads=threads, n_ctx=n_ctx, verbose=False
+            model_path=str(gguf_path), n_threads=threads, n_ctx=n_ctx, n_gpu_layers=n_gpu_layers, verbose=False
         )
 
     def complete(
