@@ -1,0 +1,22 @@
+{
+ "model": "openbmb/MiniCPM-V-4.7-1B f16 GGUF (official)",
+ "runtime": "llama.cpp b12223, Colab 2-core CPU, no GPU, network blocked",
+ "plan_trials": 10,
+ "plan_valid": 10,
+ "median_plan_wall_s": 20.41,
+ "load_s": [
+  8.608,
+  11.638
+ ],
+ "prefill_s": 12.843,
+ "peak_mem_gb": 5.21,
+ "draft": {
+  "wall_s": 17.2,
+  "completion_tokens": 56,
+  "tokens_per_s": 4.797798525784809
+ },
+ "bars": {
+  "peak_mem_under_12gb": true,
+  "plan_valid_rate_at_least_0.95": true
+ }
+}

@@ -1,0 +1,127 @@
+{
+ "official": {
+  "default": {
+   "correct": 18,
+   "wrong": 4,
+   "invalid": 8,
+   "ci95": [
+    0.41,
+    0.77
+   ],
+   "mean_attempts": 1.0,
+   "median_gen_s": 0.3,
+   "mean_completion_tokens": 21.6,
+   "failed_ids": [
+    "E01",
+    "E05",
+    "E07",
+    "E08",
+    "E12",
+    "E16",
+    "E17",
+    "N03",
+    "N04",
+    "N06",
+    "N07",
+    "N09"
+   ]
+  },
+  "greedy": {
+   "correct": 16,
+   "wrong": 3,
+   "invalid": 11,
+   "ci95": [
+    0.34,
+    0.72
+   ],
+   "mean_attempts": 1.0,
+   "median_gen_s": 0.29,
+   "mean_completion_tokens": 21.1
+  },
+  "grammar": {
+   "correct": 21,
+   "wrong": 4,
+   "invalid": 5,
+   "ci95": [
+    0.51,
+    0.85
+   ],
+   "mean_attempts": 1.0,
+   "median_gen_s": 0.33,
+   "mean_completion_tokens": 21.0,
+   "failed_ids": [
+    "E05",
+    "E07",
+    "E08",
+    "E17",
+    "N02",
+    "N03",
+    "N04",
+    "N07",
+    "N09"
+   ]
+  },
+  "repair": {
+   "correct": 17,
+   "wrong": 10,
+   "invalid": 3,
+   "ci95": [
+    0.37,
+    0.75
+   ],
+   "mean_attempts": 1.6,
+   "median_gen_s": 0.34,
+   "mean_completion_tokens": 35.2
+  }
+ },
+ "finetune": {
+  "default": {
+   "correct": 20,
+   "wrong": 7,
+   "invalid": 3,
+   "ci95": [
+    0.47,
+    0.83
+   ],
+   "mean_attempts": 1.0,
+   "median_gen_s": 1.16,
+   "mean_completion_tokens": 94.3
+  },
+  "greedy": {
+   "correct": 18,
+   "wrong": 6,
+   "invalid": 6,
+   "ci95": [
+    0.41,
+    0.77
+   ],
+   "mean_attempts": 1.0,
+   "median_gen_s": 1.4,
+   "mean_completion_tokens": 108.1
+  },
+  "grammar": {
+   "correct": 0,
+   "wrong": 0,
+   "invalid": 30,
+   "ci95": [
+    0.0,
+    0.12
+   ],
+   "mean_attempts": 1.0,
+   "median_gen_s": 0.71,
+   "mean_completion_tokens": 109.4
+  },
+  "repair": {
+   "correct": 19,
+   "wrong": 9,
+   "invalid": 2,
+   "ci95": [
+    0.44,
+    0.8
+   ],
+   "mean_attempts": 1.3,
+   "median_gen_s": 1.41,
+   "mean_completion_tokens": 136.5
+  }
+ }
+}

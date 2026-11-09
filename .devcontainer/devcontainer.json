@@ -1,0 +1,9 @@
+{
+  "name": "Weekly Analyst",
+  "image": "mcr.microsoft.com/devcontainers/python:3.12",
+  "hostRequirements": {"cpus": 4, "memory": "8gb"},
+  "postCreateCommand": "pip install -r requirements.txt",
+  "postAttachCommand": "nohup python app.py > app.log 2>&1 &",
+  "forwardPorts": [7860],
+  "portsAttributes": {"7860": {"label": "Weekly Analyst", "onAutoForward": "openBrowser"}}
+}

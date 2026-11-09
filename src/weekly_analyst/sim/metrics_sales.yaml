@@ -1,0 +1,42 @@
+date_column: date
+metrics:
+  - name: revenue
+    definition: Sum of order revenue in the period, after discounts.
+    owner: Finance analytics
+    inclusions: All completed orders.
+    exclusions: Cancelled orders and test orders.
+    column: revenue
+    agg: sum
+    segment_columns: [region, product, channel]
+    min_change: 0.05
+    version: 1
+  - name: units
+    definition: Number of units sold in the period.
+    owner: Sales operations
+    inclusions: All completed order lines.
+    exclusions: Cancelled order lines.
+    column: units
+    agg: sum
+    segment_columns: [region, product, channel]
+    min_change: 0.05
+    version: 1
+  - name: return_rate
+    definition: Share of order lines that were returned.
+    owner: Customer operations
+    inclusions: Completed order lines.
+    exclusions: Lines cancelled before shipment.
+    column: returned
+    agg: mean
+    segment_columns: [region, product, channel]
+    min_change: 0.01
+    version: 1
+  - name: avg_discount
+    definition: Average discount rate given per order line.
+    owner: Pricing
+    inclusions: All completed order lines.
+    exclusions: Free-of-charge lines.
+    column: discount
+    agg: mean
+    segment_columns: [region, product, channel]
+    min_change: 0.01
+    version: 1

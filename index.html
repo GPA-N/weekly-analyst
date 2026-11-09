@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Weekly Analyst: an on-device data analyst agent</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <p class="eyebrow">MiniCPM Spark Program, On-Device Agent Challenge</p>
+    <h1>Weekly Analyst</h1>
+    <p class="lead">An autonomous data analyst for a CSV that is replaced every week. It decides on its own whether anything
+    material changed, stays silent when nothing did, and otherwise writes a stakeholder PDF. It runs on a 1B model, on CPU,
+    with no data leaving the machine.</p>
+    <p class="chips"><span>MiniCPM-V 4.7 1B, f16 (no quantization)</span><span>llama.cpp, CPU only</span><span>read-only on the source</span><span>a person approves before anything is sent</span></p>
+  </div>
+</header>
+
+<main class="wrap">
+
+<section>
+  <h2>What the agent does each week</h2>
+  <ol class="steps">
+    <li><b>Extract</b> only the columns it needs from the new CSV, read-only, with size and format limits.</li>
+    <li><b>Validate and detect</b> with deterministic code: schema changes, then a ranked blend of detectors under a weekly alert budget. Nothing material means <em>no model call and no report</em>.</li>
+    <li><b>Plan and investigate.</b> The model picks follow-up checks from a fixed menu (named, parameterised queries first, free SQL last) inside a locked-down query engine.</li>
+    <li><b>Draft.</b> The model writes words only. Code supplies every number, chart and table.</li>
+    <li><b>Check.</b> A separate implementation recomputes every number in the PDF. Any mismatch, unlisted number or unsafe PDF object stops the run.</li>
+    <li><b>Approve.</b> The report waits for a person. Approval re-renders the stamped PDF, re-checks it, and only then sends it.</li>
+  </ol>
+</section>
+
+<section>
+  <h2>Real reports from the real model</h2>
+  <p class="note">Produced by this exact code with the f16 model on a 2-core Colab CPU, then approved with the real <code>approve</code> command. The data is synthetic sales data: eight identical weeks, then a changed week. Each run took about 3 minutes.</p>
+  <div class="tabs" role="tablist">
+    <button class="tab active" data-target="drop">Sales drop</button>
+    <button class="tab" data-target="spike">Sales spike</button>
+    <button class="tab" data-target="quiet">Quiet week</button>
+  </div>
+  <div class="panel" id="drop">
+    <p><a class="btn" href="examples/drop.pdf">Open the PDF</a></p>
+    <div class="pages">
+      <a href="examples/drop-p1.png"><img src="examples/drop-p1.png" alt="Sales drop report, page 1: executive summary" loading="lazy"></a>
+      <a href="examples/drop-p2.png"><img src="examples/drop-p2.png" alt="Sales drop report, page 2: first finding with chart" loading="lazy"></a>
+      <a href="examples/drop-p5.png"><img src="examples/drop-p5.png" alt="Sales drop report, page 5: appendix" loading="lazy"></a>
+    </div>
+  </div>
+  <div class="panel hidden" id="spike">
+    <p><a class="btn" href="examples/spike.pdf">Open the PDF</a></p>
+    <div class="pages">
+      <a href="examples/spike-p1.png"><img src="examples/spike-p1.png" alt="Sales spike report, page 1: executive summary" loading="lazy"></a>
+      <a href="examples/spike-p2.png"><img src="examples/spike-p2.png" alt="Sales spike report, page 2: first finding with chart" loading="lazy"></a>
+      <a href="examples/spike-p5.png"><img src="examples/spike-p5.png" alt="Sales spike report, page 5: appendix" loading="lazy"></a>
+    </div>
+  </div>
+  <div class="panel hidden" id="quiet">
+    <p>When the newest week is unchanged, the agent ends after detection. There is no model call, no report and nothing in the outbox. On the real runs this took about 1 second.</p>
+  </div>
+</section>
+
+<section>
+  <h2>What was measured, and what was not</h2>
+  <table>
+    <thead><tr><th>Check</th><th>Result</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>Schema-valid plan JSON</td><td>50 of 50 (GPU), 10 of 10 (CPU)</td><td>official f16 model, library-default sampling, fixed seeds</td></tr>
+      <tr><td>One model step on CPU</td><td>about 4.8 tokens/s, plan about 20 s, draft about 17 s</td><td>2-core CPU, peak memory 5.2 GB (bar: under 12 GB)</td></tr>
+      <tr><td>Full run on CPU</td><td>about 195 s for a report, about 1 s when quiet</td><td>3 scenarios, real model, real approve (bar: under 20 minutes)</td></tr>
+      <tr><td>Free SQL written by the 1B model</td><td>21 of 30 with a grammar, 18 of 30 without</td><td>short of the 24 of 30 bar, so named queries are the main path and free SQL is a last resort</td></tr>
+      <tr><td>Fine-tuned variant</td><td>not adopted</td><td>48 of 50 valid plans against 50 of 50, 4 to 9 times longer replies, 4 to 6 points lower on math and reading questions that are unlike its training data (inside the error bars)</td></tr>
+      <tr><td>Injection attempts in data</td><td>62 of 62 contained</td><td>replayed against a stand-in model that obeys them; not yet repeated with the real model</td></tr>
+      <tr><td>Automated tests</td><td>600+ passing</td><td>unit, security and end-to-end tests with a stand-in model</td></tr>
+    </tbody>
+  </table>
+  <p class="note"><b>Not done yet:</b> the scored replay evaluation on holdout data (recall of injected events with confidence intervals, quiet-week false alarms over 20 weeks, 20-run consistency), the injection corpus against the real model, and a second person scoring brief quality. These need more compute and were not run, so no claim is made about them. Chart reading by the vision encoder is also not claimed: the vision projector would not load in the runtime used. Everything here is synthetic data and CPU only; Apple Silicon speed is untested.</p>
+</section>
+
+<section>
+  <h2>Run it yourself</h2>
+  <p>This is a static page because free Hugging Face hardware no longer runs Gradio apps without a PRO plan. The whole project is in this repository, including a Gradio app that runs the real agent on a free CPU:</p>
+<pre>git clone https://huggingface.co/spaces/ewin-reg/weekly-analyst
+cd weekly-analyst
+pip install -r requirements.txt
+python app.py        # opens the demo; the first run downloads the 2 GB model</pre>
+  <p>To host it live, duplicate this Space, set <code>sdk: gradio</code> in the README and choose CPU hardware.</p>
+</section>
+
+</main>
+<footer><div class="wrap">Weekly Analyst. Synthetic data only. Model: openbmb/MiniCPM-V-4.7-1B (f16 GGUF).</div></footer>
+<script>
+document.querySelectorAll('.tab').forEach(function (tab) {
+  tab.addEventListener('click', function () {
+    document.querySelectorAll('.tab').forEach(function (t) { t.classList.remove('active'); });
+    document.querySelectorAll('.panel').forEach(function (p) { p.classList.add('hidden'); });
+    tab.classList.add('active');
+    document.getElementById(tab.dataset.target).classList.remove('hidden');
+  });
+});
+</script>
+</body>
+</html>
