@@ -51,7 +51,24 @@ except ImportError:
         return fn
 
 
+@gpu
+def _gpu_probe() -> str:
+    """ZeroGPU Spaces need one @spaces.GPU function; the agent itself runs on CPU, so the GPU time cap never applies to it."""
+    return "ok"
+
+
+_PREPARED: str | None = None
+
+
 def _model_path() -> str:
+    """Download and patch once, then reuse (called at startup so the GPU call never pays for it)."""
+    global _PREPARED
+    if _PREPARED is None:
+        _PREPARED = _prepare_model()
+    return _PREPARED
+
+
+def _prepare_model() -> str:
     """The official f16 GGUF, with the weight edit applied unless WEEKLY_ANALYST_EDIT=0 (the patch is tiny, the model is not)."""
     local = HERE / MODEL_FILE
     if local.exists():
@@ -70,6 +87,15 @@ def _model_path() -> str:
     return str(out)
 
 
+def _threads() -> int:
+    """Threads for llama.cpp: the CPUs this process may use, capped (a shared host can report 192 and thrash)."""
+    try:
+        usable = len(os.sched_getaffinity(0))
+    except AttributeError:
+        usable = os.cpu_count() or 2
+    return max(2, min(8, usable))
+
+
 def _gpu_layers() -> int:
     try:
         from llama_cpp import llama_supports_gpu_offload
@@ -83,16 +109,25 @@ def get_client() -> LlamaCppClient:
     """CPU: load once and keep. CUDA: load per run, because a ZeroGPU context ends with the call."""
     global _client
     layers = _gpu_layers()
+    started = time.perf_counter()
     if layers:
-        return LlamaCppClient(Path(_model_path()), threads=os.cpu_count() or 2, n_ctx=N_CTX, n_gpu_layers=layers)
+        client = LlamaCppClient(Path(_model_path()), threads=_threads(), n_ctx=N_CTX, n_gpu_layers=layers)
+        print(f"[app] gpu_layers={layers} threads={_threads()} host_cpus={os.cpu_count()} model load {time.perf_counter() - started:.1f}s", flush=True)
+        return client
     if _client is None:
-        _client = LlamaCppClient(Path(_model_path()), threads=os.cpu_count() or 2, n_ctx=N_CTX)
+        _client = LlamaCppClient(Path(_model_path()), threads=_threads(), n_ctx=N_CTX)
+        print(f"[app] cpu-only threads={_threads()} host_cpus={os.cpu_count()} model load {time.perf_counter() - started:.1f}s", flush=True)
     return _client
 
 
-@gpu
 def run_on_device(scenario: str, base: Path) -> DemoRun:
-    return run_demo(scenario, get_client(), base)
+    started = time.perf_counter()
+    demo = run_demo(scenario, get_client(), base)
+    print(f"[app] {scenario} finished in {time.perf_counter() - started:.1f}s", flush=True)
+    return demo
+
+
+_model_path()  # download and patch now, outside any GPU call
 
 
 def page_images(pdf_path: Path, scale: float = 1.2) -> list[str]:

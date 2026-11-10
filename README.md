@@ -19,6 +19,9 @@ Synthetic data only. Nothing is uploaded and the source file is never modified. 
 
 ## Run it
 
+On the Hugging Face Space the agent runs on CPU (8 threads); a spike or drop scenario takes about 5 minutes, a quiet week a few seconds. The llama.cpp build there did not offload to the GPU.
+
+
 Click **Code > Codespaces > Create codespace** on this repository. The dev container installs the requirements and starts the Gradio app on port 7860; open the forwarded port. The first run downloads the full precision (f16) MiniCPM-V 4.7 1B GGUF from Hugging Face, about 2 GB, and runs it on CPU.
 
 Locally: `pip install -r requirements.txt && python app.py`.
