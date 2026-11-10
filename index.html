@@ -11,9 +11,14 @@
   <div class="wrap">
     <p class="eyebrow">MiniCPM Spark Program, On-Device Agent Challenge</p>
     <h1>Weekly Analyst</h1>
-    <p class="lead">An autonomous data analyst for a CSV that is replaced every week. It decides on its own whether anything
-    material changed, stays silent when nothing did, and otherwise writes a stakeholder PDF. It runs on a 1B model, on CPU,
-    with no data leaving the machine.</p>
+    <p class="lead">Drop a CSV in a folder and do nothing else. If something material changed, a stakeholder-ready PDF appears.
+    If not, the agent stays quiet. It runs on a 1B model, on CPU, with no data leaving the machine.</p>
+    <p class="lead">Most AI analyst demos let the model write the numbers, and a fluent report with one wrong figure is worse than none.
+    Here the model never touches a number: code finds the change, runs the queries and draws the charts, a separate recompute checks every figure,
+    and a person approves the send. The small model does what it is good at: choosing the analysis and writing the words around the evidence.</p>
+    <p><a class="btn" href="https://huggingface.co/spaces/ewin-reg/weekly-analyst">Try the live demo</a>
+    <a class="btn" href="https://github.com/GPA-N/weekly-analyst">Code on GitHub</a>
+    <a class="btn" href="https://huggingface.co/ewin-reg/MiniCPM-V-4.7-1B-weekly-analyst-edit">Edited model</a></p>
     <p class="chips"><span>MiniCPM-V 4.7 1B, f16 (no quantization)</span><span>llama.cpp, CPU only</span><span>read-only on the source</span><span>a person approves before anything is sent</span></p>
   </div>
 </header>
@@ -72,24 +77,51 @@
       <tr><td>Free SQL written by the 1B model</td><td>21 of 30 with a grammar, 18 of 30 without</td><td>short of the 24 of 30 bar, so named queries are the main path and free SQL is a last resort</td></tr>
       <tr><td>Fine-tuned variant</td><td>not adopted</td><td>48 of 50 valid plans against 50 of 50, 4 to 9 times longer replies, 4 to 6 points lower on math and reading questions that are unlike its training data (inside the error bars)</td></tr>
       <tr><td>Injection attempts in data</td><td>62 of 62 contained</td><td>replayed against a stand-in model that obeys them; not yet repeated with the real model</td></tr>
-      <tr><td>Automated tests</td><td>600+ passing</td><td>unit, security and end-to-end tests with a stand-in model</td></tr>
+      <tr><td>Automated tests</td><td>654 passing</td><td>unit, security and end-to-end tests with a stand-in model</td></tr>
+      <tr><td>Weight edit (16,384 values, no training)</td><td>plans 64/80 to 80/80</td><td>80 held-out synthetic tasks, no grammar; a random edit of the same size stayed at 64/80; drafts stayed 0/80 without a grammar</td></tr>
+      <tr><td>Live Space, spike scenario</td><td>draft in about 300 s, approve in 18 s</td><td>real model on the Space CPU, checked on 2026-11-10</td></tr>
+      <tr><td>Change detector, holdout recall</td><td>0.21 (interval 0.13 to 0.30)</td><td>below the 0.80 bar. On dev seeds the ranking alone reaches 0.61 at the top 3, so the strict quiet-week gate costs most of it. 14% of quiet weeks raised an alert. Not fixed yet</td></tr>
     </tbody>
   </table>
-  <p class="note"><b>Not done yet:</b> the scored replay evaluation on holdout data (recall of injected events with confidence intervals, quiet-week false alarms over 20 weeks, 20-run consistency), the injection corpus against the real model, and a second person scoring brief quality. These need more compute and were not run, so no claim is made about them. Chart reading by the vision encoder is also not claimed: the vision projector would not load in the runtime used. Everything here is synthetic data and CPU only; Apple Silicon speed is untested.</p>
+  <p class="note"><b>Not done yet:</b> a better detector gate, the 20-run consistency check, the injection corpus against the real model, a second person scoring brief quality, a reliability report and a demo video. Chart reading by the vision encoder is not claimed: the vision projector would not load in the runtime used. Everything here is synthetic data; Apple Silicon speed is untested.</p>
+</section>
+
+<section>
+  <h2>A small weight edit, found without training</h2>
+  <p>We changed 16,384 values, about 0.001% of the model, in two MLP layers. The direction came from the agent's own correct and failing plan outputs, the columns were ranked by how much they push along it, and the strength was chosen on separate dev seeds. On 80 held-out tasks plans went from 64/80 to 80/80 with no grammar. A random direction of the same size changed nothing. The Space applies the edit as a 66 KB patch to the official f16 model at start. Limits: synthetic tasks, no grammar, one greedy run, and production adds a grammar and retries, so the real gain is probably smaller. Details are in the <a href="https://huggingface.co/ewin-reg/MiniCPM-V-4.7-1B-weekly-analyst-edit">model card</a>.</p>
+</section>
+
+<section>
+  <h2>Problems we hit, and what fixed them</h2>
+  <table>
+    <thead><tr><th>Problem</th><th>What we did</th></tr></thead>
+    <tbody>
+      <tr><td>Fluent reports can carry wrong numbers</td><td>Code supplies every number; a separate recompute checks each; a digit in model text is rejected; the stamped PDF is re-checked before send.</td></tr>
+      <tr><td>CSV labels can carry prompt injection</td><td>Labels become letters-only hash codes before the model or PDF sees them; the plan never holds SQL; sending is code-only; approval needs a terminal or token file.</td></tr>
+      <tr><td>First real runs halted: unknown query, wrong column, digits in drafts</td><td>Query catalogue and a worked example in the prompt, a parameter check with a specific re-prompt, words-only draft evidence.</td></tr>
+      <tr><td>Quantization lowered quality</td><td>Full precision f16 everywhere.</td></tr>
+      <tr><td>Colab VMs died mid-run and lost results, twice</td><td>Detached jobs that push every result to a private Hugging Face dataset.</td></tr>
+      <tr><td>A plain edit did nothing; strong or wide edits broke the model (0/40 plans)</td><td>Searched strength and width on dev seeds; kept the edit narrow; validated once on held-out tasks against a random-direction control.</td></tr>
+      <tr><td>The converted edited GGUF would not load in llama-cpp-python 0.3.36</td><td>Ship the edit as a patch on the official GGUF, verified equal to the converted file on the edited tensors.</td></tr>
+      <tr><td>Space repo cap is 1 GB, the model is 2 GB</td><td>Download the official GGUF at start and patch a copy.</td></tr>
+      <tr><td>ZeroGPU killed the run ("GPU task aborted") and 192 reported CPUs thrashed llama.cpp</td><td>Run on CPU outside the GPU time cap, threads capped at 8, one tiny GPU function so the Space starts.</td></tr>
+      <tr><td>Gradio Spaces could not be created by API on a free account (402)</td><td>Created in the web UI, updated through the API.</td></tr>
+    </tbody>
+  </table>
 </section>
 
 <section>
   <h2>Run it yourself</h2>
-  <p>This is a static page because free Hugging Face hardware no longer runs Gradio apps without a PRO plan. The whole project is in this repository, including a Gradio app that runs the real agent on a free CPU:</p>
-<pre>git clone https://huggingface.co/spaces/ewin-reg/weekly-analyst
+  <p>The live demo is the <a href="https://huggingface.co/spaces/ewin-reg/weekly-analyst">Hugging Face Space</a>. A spike or drop scenario takes about 5 minutes on its CPU; a quiet week takes seconds. To run it locally:</p>
+<pre>git clone https://github.com/GPA-N/weekly-analyst
 cd weekly-analyst
 pip install -r requirements.txt
-python app.py        # opens the demo; the first run downloads the 2 GB model</pre>
-  <p>To host it live, duplicate this Space, set <code>sdk: gradio</code> in the README and choose CPU hardware.</p>
+python app.py        # the first run downloads the 2 GB f16 model</pre>
+  <p>Set <code>WEEKLY_ANALYST_EDIT=0</code> to run the unedited model. For CUDA use <code>requirements.cuda.txt</code> (supported in code, not shown to use the GPU on the Space).</p>
 </section>
 
 </main>
-<footer><div class="wrap">Weekly Analyst. Synthetic data only. Model: openbmb/MiniCPM-V-4.7-1B (f16 GGUF).</div></footer>
+<footer><div class="wrap">Weekly Analyst. Synthetic data only. Model: openbmb/MiniCPM-V-4.7-1B (f16 GGUF) with a 16,384-value patch.</div></footer>
 <script>
 document.querySelectorAll('.tab').forEach(function (tab) {
   tab.addEventListener('click', function () {
