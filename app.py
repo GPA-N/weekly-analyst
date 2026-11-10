@@ -52,12 +52,22 @@ except ImportError:
 
 
 def _model_path() -> str:
-    local = HERE / MODEL_FILE  # the Space repo carries the GGUF, so there is no download on start
+    """The official f16 GGUF, with the weight edit applied unless WEEKLY_ANALYST_EDIT=0 (the patch is tiny, the model is not)."""
+    local = HERE / MODEL_FILE
     if local.exists():
-        return str(local)
-    from huggingface_hub import hf_hub_download
+        base = str(local)
+    else:
+        from huggingface_hub import hf_hub_download
 
-    return hf_hub_download(MODEL_REPO, MODEL_FILE)
+        base = hf_hub_download(MODEL_REPO, MODEL_FILE)
+    if os.environ.get("WEEKLY_ANALYST_EDIT", "1") == "0":
+        return base
+    out = BASE / "MiniCPM-V-4_7-1B-edited-F16.gguf"
+    if not out.exists():
+        from weekly_analyst.analysis.weight_patch import apply_patch
+
+        apply_patch(Path(base), HERE / "assets" / "edit_patch.npz", out)
+    return str(out)
 
 
 def _gpu_layers() -> int:

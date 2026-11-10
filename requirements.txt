@@ -15,3 +15,4 @@ matplotlib==3.10.8
 reportlab==4.4.10
 svglib==2.4.0
 pypdfium2==5.14.0
+gguf

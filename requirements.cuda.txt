@@ -1,3 +1,4 @@
 # CUDA build of llama.cpp (cu124 wheels); everything else as in requirements.txt
 --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cu124
 llama-cpp-python==0.3.36
+gguf
