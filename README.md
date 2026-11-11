@@ -4,6 +4,7 @@
 
 Weekly Analyst is an autonomous data analyst that lives next to a file you replace every week. It runs fully on your machine, on CPU, with MiniCPM-V 4.7 (1B, full precision f16, no quantization). Built for the MiniCPM Spark Program, On-Device Agent Challenge.
 
+- Demo video (90 s, with sound): [media/weekly-analyst-demo.mp4](media/weekly-analyst-demo.mp4), also embedded on https://gpa-n.github.io/weekly-analyst/
 - Live demo: https://huggingface.co/spaces/ewin-reg/weekly-analyst (a spike or drop scenario takes about 5 minutes on the Space's CPU; a quiet week takes seconds)
 - Example reports: https://gpa-n.github.io/weekly-analyst/
 - Edited model: https://huggingface.co/ewin-reg/MiniCPM-V-4.7-1B-weekly-analyst-edit
