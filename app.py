@@ -252,9 +252,13 @@ findings with charts, risks and data quality, next checks, and appendices for de
 - **Read-only, local, offline.** The source file is never modified, and nothing leaves the machine.
 
 ### The model
-Official MiniCPM-V 4.7 1B in full precision (f16 GGUF, no quantization), running on CPU through llama.cpp.
-Measured on a 2-core CPU: 4.8 tokens per second, 5.2 GB peak memory, plan JSON valid in 10 of 10 trials
-(50 of 50 on GPU). A fine-tuned variant was tested and not adopted: 48 of 50 valid plans, 4 to 9 times longer replies.
+Official MiniCPM-V 4.7 1B in full precision (f16 GGUF, no quantization) plus one small change: a rank-8 LoRA
+merged into the `down_proj` weights of all 24 layers (every other tensor is identical to the official file). It runs on
+CPU through llama.cpp. On never-touched synthetic seeds, without a JSON grammar, the LoRA scored plans 80/80 and drafts
+80/80 (the unedited model: 65/80 and 0/80). Measured on a 2-core CPU with the official file: 4.8 tokens per second,
+5.2 GB peak memory, plan JSON valid in 10 of 10 trials (50 of 50 on GPU); a spike week took about 297 s on this Space
+with the LoRA. An earlier gradient fine-tune was tested and not adopted: 48 of 50 valid plans, 4 to 9 times longer replies.
+Set `WEEKLY_ANALYST_LORA=0` for the older 16,384-value plan edit.
 
 ### Honest limits
 - Synthetic sales data only, so reliability figures are from synthetic replays.
@@ -262,6 +266,9 @@ Measured on a 2-core CPU: 4.8 tokens per second, 5.2 GB peak memory, plan JSON v
   parameterized queries are the main path and free SQL is a last resort.
 - Chart reading by the vision encoder is not claimed: the projector would not load in the runtime used.
 - CPU only here; Apple Silicon speed is untested.
+- The change detector's recall on the holdout replay is 0.21 (the bar was 0.80), and 14% of quiet weeks raised an alert.
+- The weight-edit results are synthetic, one run each. The LoRA still fails an instruction that does not name the JSON
+  fields (0/40); here the instruction is fixed and names them.
 """
 
 with gr.Blocks(title="Weekly Analyst") as demo_app:
