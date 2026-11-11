@@ -1,0 +1,809 @@
+{
+ "raw_base_drafts": [
+  {
+   "raw": "{\n  \"headline\": \"North region shows revenue growth for basic and pro products\",\n  \"recommended_action\": \"Monitor basic and pro products in North region\",\n  \"finding\": {\n    \"item_key\": \"revenue|2026-W43|region=north,product=basic,channel=store\",\n    \"so_what\": \"Revenue increases\",\n    \"metric_refs\": \"revenue, north, basic, store\"\n  },\n  \"finding\": {\n    \"item_key\": \"revenue|2026-W43|region=north,product=basic,channel=web\",\n    \"so_what\": \"Revenue increases\",\n    \"metric_refs\": \"revenue, north, basic, web\"\n  },\n  \"finding\": {\n    \"item_key\": \"revenue|2026-W43|region=north,product=pro,channel=store\",\n    \"so_what\": \"Revenue increases\",\n    \"metric_refs\": \"revenue, north, pro, store\"\n  }\n}",
+   "error": "5 validation errors for DraftFields\nfindings\n  Field required [type=missing, input_value={'headline': 'North regio...ue, north, pro, store'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.12/v/missing\ncaveats\n  Field required [type=missing, input_value={'headline': 'North regio...ue, north, pro, store'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.12/v/missing\nfinding\n  Extra inputs are not permitted [type=extra_forbidden,",
+   "scores": {
+    "json": true,
+    "schema": false,
+    "length": false,
+    "no_numerals": false,
+    "keys": false
+   }
+  },
+  {
+   "raw": "{\n  \"cold_start\": false,\n  \"items\": [\n    {\n      \"item_key\": \"revenue|2026-W43|region=north,product=basic,channel=store\",\n      \"finding\": \"revenue decreased in north basic store\",\n      \"so_what\": \"trend observation\",\n      \"metric_refs\": \"revenue\"\n    },\n    {\n      \"item_key\": \"revenue|2026-W43|region=north,product=basic,channel=web\",\n      \"finding\": \"revenue decreased in north basic web\",\n      \"so_what\": \"trend observation\",\n      \"metric_refs\": \"revenue\"\n    },\n    {\n      \"item_key\": \"revenue|2026-W43|region=north,product=pro,channel=store\",\n      \"finding\": \"revenue decreased in north pro store\",\n      \"so_what\": \"trend observation\",\n      \"metric_refs\": \"revenue\"\n    }\n  ],\n  \"caveats\": \"all segments show downward trend\"\n}",
+   "error": "6 validation errors for DraftFields\nheadline\n  Field required [type=missing, input_value={'cold_start': False, 'it...ts show downward trend'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.12/v/missing\nrecommended_action\n  Field required [type=missing, input_value={'cold_start': False, 'it...ts show downward trend'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.12/v/missing\nfindings\n  Field required [type=missing, input_value",
+   "scores": {
+    "json": true,
+    "schema": false,
+    "length": false,
+    "no_numerals": false,
+    "keys": false
+   }
+  },
+  {
+   "raw": "{\n  \"headline\": \"North region shows revenue growth across basic and pro products\",\n  \"recommended_action\": \"Monitor basic and pro product channels in North region\",\n  \"finding\": {\n    \"item_key\": \"revenue|2026-W44|region=north,product=basic,channel=store\",\n    \"so_what\": \"Revenue increases\",\n    \"metric_refs\": \"revenue, north, basic, store\"\n  },\n  \"finding\": {\n    \"item_key\": \"revenue|2026-W44|region=north,product=basic,channel=web\",\n    \"so_what\": \"Revenue increases\",\n    \"metric_refs\": \"revenue, north, basic, web\"\n  },\n  \"finding\": {\n    \"item_key\": \"revenue|2026-W44|region=north,product=pro,channel=store\",\n    \"so_what\": \"Revenue increases\",\n    \"metric_refs\": \"revenue, north, pro, store\"\n  }\n}",
+   "error": "5 validation errors for DraftFields\nfindings\n  Field required [type=missing, input_value={'headline': 'North regio...ue, north, pro, store'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.12/v/missing\ncaveats\n  Field required [type=missing, input_value={'headline': 'North regio...ue, north, pro, store'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.12/v/missing\nfinding\n  Extra inputs are not permitted [type=extra_forbidden,",
+   "scores": {
+    "json": true,
+    "schema": false,
+    "length": false,
+    "no_numerals": false,
+    "keys": false
+   }
+  },
+  {
+   "raw": "{\n  \"cold_start\": false,\n  \"items\": [\n    {\n      \"item_key\": \"revenue|2026-W44|region=north,product=basic,channel=store\",\n      \"finding\": \"revenue decreased in north basic store\",\n      \"so_what\": \"decline in basic store revenue\",\n      \"metric_refs\": \"revenue\"\n    },\n    {\n      \"item_key\": \"revenue|2026-W44|region=north,product=basic,channel=web\",\n      \"finding\": \"revenue decreased in north basic web\",\n      \"so_what\": \"decline in basic web revenue\",\n      \"metric_refs\": \"revenue\"\n    },\n    {\n      \"item_key\": \"revenue|2026-W44|region=north,product=pro,channel=store\",\n      \"finding\": \"revenue decreased in north pro store\",\n      \"so_what\": \"decline in pro store revenue\",\n      \"metric_refs\": \"revenue\"\n    }\n  ],\n  \"caveats\": \"all segments show decline\"\n}",
+   "error": "6 validation errors for DraftFields\nheadline\n  Field required [type=missing, input_value={'cold_start': False, 'it... segments show decline'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.12/v/missing\nrecommended_action\n  Field required [type=missing, input_value={'cold_start': False, 'it... segments show decline'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.12/v/missing\nfindings\n  Field required [type=missing, input_value",
+   "scores": {
+    "json": true,
+    "schema": false,
+    "length": false,
+    "no_numerals": false,
+    "keys": false
+   }
+  },
+  {
+   "raw": "{\n  \"cold_start\": false,\n  \"headline\": \"Units Increase in North Region\",\n  \"recommended_action\": \"Monitor Channels\",\n  \"finding\": {\n    \"item_key\": \"units|2026-W45|region=north,product=basic,channel=store\",\n    \"so_what\": \"Units Rise\",\n    \"metric_refs\": \"units: north region up\"\n  },\n  \"finding\": {\n    \"item_key\": \"units|2026-W45|region=north,product=basic,channel=web\",\n    \"so_what\": \"Units Rise\",\n    \"metric_refs\": \"units: north region up\"\n  },\n  \"finding\": {\n    \"item_key\": \"units|2026-W45|region=north,product=pro,channel=store\",\n    \"so_what\": \"Units Rise\",\n    \"metric_refs\": \"units: north region up\"\n  },\n  \"caveats\": \"All Segments Up\"\n}",
+   "error": "6 validation errors for DraftFields\nfindings\n  Field required [type=missing, input_value={'cold_start': False, 'he...ats': 'All Segments Up'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.12/v/missing\ncaveats\n  Input should be a valid array [type=list_type, input_value='All Segments Up', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.12/v/list_type\ncold_start\n  Extra inputs are not permitted [type=extra_forbidden, input_value=F",
+   "scores": {
+    "json": true,
+    "schema": false,
+    "length": false,
+    "no_numerals": false,
+    "keys": false
+   }
+  },
+  {
+   "raw": "{\n  \"cold_start\": false,\n  \"items\": [\n    {\n      \"item_key\": \"revenue|2026-W45|region=north,product=basic,channel=store\",\n      \"finding\": \"revenue decreased in north basic store\",\n      \"so_what\": \"trend observation\",\n      \"metric_refs\": \"revenue\"\n    },\n    {\n      \"item_key\": \"revenue|2026-W45|region=north,product=basic,channel=web\",\n      \"finding\": \"revenue decreased in north basic web\",\n      \"so_what\": \"trend observation\",\n      \"metric_refs\": \"revenue\"\n    },\n    {\n      \"item_key\": \"revenue|2026-W45|region=north,product=pro,channel=store\",\n      \"finding\": \"revenue decreased in north pro store\",\n      \"so_what\": \"trend observation\",\n      \"metric_refs\": \"revenue\"\n    }\n  ],\n  \"caveats\": \"all segments show downward trend\"\n}",
+   "error": "6 validation errors for DraftFields\nheadline\n  Field required [type=missing, input_value={'cold_start': False, 'it...ts show downward trend'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.12/v/missing\nrecommended_action\n  Field required [type=missing, input_value={'cold_start': False, 'it...ts show downward trend'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.12/v/missing\nfindings\n  Field required [type=missing, input_value",
+   "scores": {
+    "json": true,
+    "schema": false,
+    "length": false,
+    "no_numerals": false,
+    "keys": false
+   }
+  }
+ ],
+ "schema_in_prompt_dev": {
+  "pass": 40,
+  "n": 40,
+  "parts": {
+   "json": 40,
+   "schema": 40,
+   "length": 40,
+   "no_numerals": 40,
+   "keys": 40
+  }
+ },
+ "schema_in_prompt_samples": [
+  "{\n  \"headline\": \"North Region Revenue Up\",\n  \"recommended_action\": \"Monitor Channels\",\n  \"findings\": [\n    {\n      \"item_key\": \"revenue|2026-W43|region=north,product=basic,channel=store\",\n      \"so_what\": \"Revenue Increases\",\n      \"metric_refs\": [\n        \"revenue\",\n        \"region\",\n        \"product\",\n        \"channel\"\n      ]\n    },\n    {\n      \"item_key\": \"revenue|2026-W43|region=north,product=basic,channel=web\",\n      \"so_what\": \"Revenue Increases\",\n      \"metric_refs\": [\n        \"revenue\",\n        \"region\",\n        \"product\",\n        \"channel\"\n      ]\n    },\n    {\n      \"item_key\": \"reve",
+  "{\n  \"headline\": \"North Region Revenue Decline\",\n  \"recommended_action\": \"Monitor Basic and Pro Products\",\n  \"findings\": [\n    {\n      \"item_key\": \"revenue|2026-W43|region=north,product=basic,channel=store\",\n      \"so_what\": \"Revenue Decrease\",\n      \"metric_refs\": [\n        \"revenue\"\n      ]\n    },\n    {\n      \"item_key\": \"revenue|2026-W43|region=north,product=basic,channel=web\",\n      \"so_what\": \"Revenue Decrease\",\n      \"metric_refs\": [\n        \"revenue\"\n      ]\n    },\n    {\n      \"item_key\": \"revenue|2026-W43|region=north,product=pro,channel=store\",\n      \"so_what\": \"Revenue Decrease\",\n    ",
+  "{\n  \"headline\": \"North Region Revenue Up\",\n  \"recommended_action\": \"Monitor Channels\",\n  \"findings\": [\n    {\n      \"item_key\": \"revenue|2026-W44|region=north,product=basic,channel=store\",\n      \"so_what\": \"Revenue Increases\",\n      \"metric_refs\": [\n        \"revenue\",\n        \"region\",\n        \"product\",\n        \"channel\"\n      ]\n    },\n    {\n      \"item_key\": \"revenue|2026-W44|region=north,product=basic,channel=web\",\n      \"so_what\": \"Revenue Increases\",\n      \"metric_refs\": [\n        \"revenue\",\n        \"region\",\n        \"product\",\n        \"channel\"\n      ]\n    },\n    {\n      \"item_key\": \"reve"
+ ],
+ "ww_head": [
+  {
+   "layer_id": 7,
+   "name": "out_proj",
+   "alpha": 3.246907803286452,
+   "alpha_weighted": 2.5830807636863224,
+   "spectral_norm": 6.245266914367676,
+   "stable_rank": 52.45704758719018,
+   "D": 0.04613077408503513
+  },
+  {
+   "layer_id": 8,
+   "name": "in_proj_qkv",
+   "alpha": 2.7234466965648614,
+   "alpha_weighted": 6.605700261499542,
+   "spectral_norm": 266.37457275390625,
+   "stable_rank": 6.527306309216602,
+   "D": 0.025981611898073687
+  },
+  {
+   "layer_id": 9,
+   "name": "in_proj_z",
+   "alpha": 3.521916103144833,
+   "alpha_weighted": 5.037518326908852,
+   "spectral_norm": 26.93609046936035,
+   "stable_rank": 23.648515306802416,
+   "D": 0.06861851040375705
+  },
+  {
+   "layer_id": 10,
+   "name": "in_proj_b",
+   "alpha": 1.787106513954062,
+   "alpha_weighted": 0.38146301163784446,
+   "spectral_norm": 1.6347557306289673,
+   "stable_rank": 2.9883437151912466,
+   "D": 0.07320119092253397
+  },
+  {
+   "layer_id": 11,
+   "name": "in_proj_a",
+   "alpha": 2.0018582043552136,
+   "alpha_weighted": 2.04630310432638,
+   "spectral_norm": 10.524508476257324,
+   "stable_rank": 2.178482299385805,
+   "D": 0.053271238629398476
+  },
+  {
+   "layer_id": 13,
+   "name": "gate_proj",
+   "alpha": 4.437867300881256,
+   "alpha_weighted": 4.785135681447615,
+   "spectral_norm": 11.974328994750977,
+   "stable_rank": 46.38490022486969,
+   "D": 0.02205347467647434
+  },
+  {
+   "layer_id": 14,
+   "name": "up_proj",
+   "alpha": 13.398860522968102,
+   "alpha_weighted": -0.18627987492409886,
+   "spectral_norm": 0.9684948921203613,
+   "stable_rank": 289.36544507522257,
+   "D": 0.06542953382157313
+  },
+  {
+   "layer_id": 15,
+   "name": "down_proj",
+   "alpha": 6.598317304768116,
+   "alpha_weighted": 3.389597787377941,
+   "spectral_norm": 3.2636711597442627,
+   "stable_rank": 84.69670107978648,
+   "D": 0.045863329569932776
+  },
+  {
+   "layer_id": 23,
+   "name": "out_proj",
+   "alpha": 3.750073255095904,
+   "alpha_weighted": 3.3703553905394923,
+   "spectral_norm": 7.9203410148620605,
+   "stable_rank": 43.23945680210771,
+   "D": 0.04547277747624057
+  },
+  {
+   "layer_id": 24,
+   "name": "in_proj_qkv",
+   "alpha": 3.3845448096274646,
+   "alpha_weighted": 4.895559941028706,
+   "spectral_norm": 27.954105377197266,
+   "stable_rank": 63.094808102659066,
+   "D": 0.014117082928066793
+  },
+  {
+   "layer_id": 25,
+   "name": "in_proj_z",
+   "alpha": 4.3084638285588195,
+   "alpha_weighted": 6.127234469926728,
+   "spectral_norm": 26.432546615600586,
+   "stable_rank": 29.562514492844098,
+   "D": 0.041998571748262215
+  },
+  {
+   "layer_id": 26,
+   "name": "in_proj_b",
+   "alpha": 1.8545180610670688,
+   "alpha_weighted": 0.640945446860075,
+   "spectral_norm": 2.2162203788757324,
+   "stable_rank": 2.49221182964352,
+   "D": 0.09261346440393314
+  },
+  {
+   "layer_id": 27,
+   "name": "in_proj_a",
+   "alpha": 1.6714253772723944,
+   "alpha_weighted": 1.1918077111491352,
+   "spectral_norm": 5.164742946624756,
+   "stable_rank": 2.918232894161995,
+   "D": 0.0689984993537206
+  },
+  {
+   "layer_id": 29,
+   "name": "gate_proj",
+   "alpha": 4.435808231550485,
+   "alpha_weighted": 4.896764236193327,
+   "spectral_norm": 12.703313827514648,
+   "stable_rank": 52.57596243486959,
+   "D": 0.01595417586577108
+  },
+  {
+   "layer_id": 30,
+   "name": "up_proj",
+   "alpha": 7.955688224465372,
+   "alpha_weighted": 2.7133030761598005,
+   "spectral_norm": 2.1930673122406006,
+   "stable_rank": 128.07215519659226,
+   "D": 0.0571307746435461
+  },
+  {
+   "layer_id": 31,
+   "name": "down_proj",
+   "alpha": 6.550974269691183,
+   "alpha_weighted": 3.2371867518322515,
+   "spectral_norm": 3.1199920177459717,
+   "stable_rank": 90.66591331372966,
+   "D": 0.024151058657506552
+  },
+  {
+   "layer_id": 39,
+   "name": "out_proj",
+   "alpha": 3.969621358353453,
+   "alpha_weighted": 3.3827634657456622,
+   "spectral_norm": 7.114800930023193,
+   "stable_rank": 46.90924389053832,
+   "D": 0.028311784439491672
+  },
+  {
+   "layer_id": 40,
+   "name": "in_proj_qkv",
+   "alpha": 3.147767313278389,
+   "alpha_weighted": 4.849004513540823,
+   "spectral_norm": 34.71030044555664,
+   "stable_rank": 54.74837151766269,
+   "D": 0.01992927481504747
+  },
+  {
+   "layer_id": 41,
+   "name": "in_proj_z",
+   "alpha": 3.87296799102152,
+   "alpha_weighted": 6.325274682824008,
+   "spectral_norm": 42.971981048583984,
+   "stable_rank": 18.771128127443443,
+   "D": 0.04404494671600667
+  },
+  {
+   "layer_id": 42,
+   "name": "in_proj_b",
+   "alpha": 1.749409907332274,
+   "alpha_weighted": 0.4073123964132676,
+   "spectral_norm": 1.70933997631073,
+   "stable_rank": 3.2402347775030487,
+   "D": 0.11243703230612426
+  },
+  {
+   "layer_id": 43,
+   "name": "in_proj_a",
+   "alpha": 1.9487905353020585,
+   "alpha_weighted": 1.1180878371127563,
+   "spectral_norm": 3.747436046600342,
+   "stable_rank": 3.316887676561594,
+   "D": 0.07219878531230461
+  },
+  {
+   "layer_id": 45,
+   "name": "gate_proj",
+   "alpha": 4.883490581180633,
+   "alpha_weighted": 7.686962543353414,
+   "spectral_norm": 37.50345993041992,
+   "stable_rank": 26.528215910590205,
+   "D": 0.04159523162449108
+  },
+  {
+   "layer_id": 46,
+   "name": "up_proj",
+   "alpha": 10.530405062853362,
+   "alpha_weighted": 1.220993300482807,
+   "spectral_norm": 1.3060184717178345,
+   "stable_rank": 195.60045041103461,
+   "D": 0.05623887185360077
+  },
+  {
+   "layer_id": 47,
+   "name": "down_proj",
+   "alpha": 7.029250042353007,
+   "alpha_weighted": 3.707718690560063,
+   "spectral_norm": 3.3687596321105957,
+   "stable_rank": 77.36585008928917,
+   "D": 0.05133476088055855
+  },
+  {
+   "layer_id": 53,
+   "name": "q_proj",
+   "alpha": 3.7606371822432685,
+   "alpha_weighted": 7.880996886225169,
+   "spectral_norm": 124.63920593261719,
+   "stable_rank": 13.354864421989936,
+   "D": 0.049901199963847676
+  },
+  {
+   "layer_id": 54,
+   "name": "k_proj",
+   "alpha": 2.9612536045468314,
+   "alpha_weighted": 0.6348782352358584,
+   "spectral_norm": 1.6383062601089478,
+   "stable_rank": 49.26255191250814,
+   "D": 0.03733730885950337
+  },
+  {
+   "layer_id": 55,
+   "name": "v_proj",
+   "alpha": 7.871829304334488,
+   "alpha_weighted": -0.2902729245136729,
+   "spectral_norm": 0.9185971617698669,
+   "stable_rank": 92.19793769098052,
+   "D": 0.07829948920804652
+  },
+  {
+   "layer_id": 56,
+   "name": "o_proj",
+   "alpha": 4.893422954363119,
+   "alpha_weighted": 3.0496007825824636,
+   "spectral_norm": 4.199562072753906,
+   "stable_rank": 75.06460842470797,
+   "D": 0.038277734370721794
+  },
+  {
+   "layer_id": 60,
+   "name": "gate_proj",
+   "alpha": 4.341429091914947,
+   "alpha_weighted": 6.736469094404471,
+   "spectral_norm": 35.61811065673828,
+   "stable_rank": 28.23188204050695,
+   "D": 0.02426955066067471
+  },
+  {
+   "layer_id": 61,
+   "name": "up_proj",
+   "alpha": 15.593433462579803,
+   "alpha_weighted": -1.3888282441610533,
+   "spectral_norm": 0.8145824670791626,
+   "stable_rank": 303.1505300494255,
+   "D": 0.0813080328560225
+  },
+  {
+   "layer_id": 62,
+   "name": "down_proj",
+   "alpha": 6.8679702612953175,
+   "alpha_weighted": 2.4397211840208937,
+   "spectral_norm": 2.2658531665802,
+   "stable_rank": 110.73952486425615,
+   "D": 0.02881625773367713
+  },
+  {
+   "layer_id": 70,
+   "name": "out_proj",
+   "alpha": 3.88763679019591,
+   "alpha_weighted": 2.5918299606397857,
+   "spectral_norm": 4.641787052154541,
+   "stable_rank": 63.330062162177235,
+   "D": 0.02007869119729966
+  },
+  {
+   "layer_id": 71,
+   "name": "in_proj_qkv",
+   "alpha": 3.329038064289088,
+   "alpha_weighted": 6.016473747263043,
+   "spectral_norm": 64.16097259521484,
+   "stable_rank": 35.5567524147616,
+   "D": 0.022707934086517945
+  },
+  {
+   "layer_id": 72,
+   "name": "in_proj_z",
+   "alpha": 4.240664407425929,
+   "alpha_weighted": 6.437750373512884,
+   "spectral_norm": 32.96852111816406,
+   "stable_rank": 20.721465770312047,
+   "D": 0.03719327002285078
+  },
+  {
+   "layer_id": 73,
+   "name": "in_proj_b",
+   "alpha": 1.6861443554803854,
+   "alpha_weighted": 0.24058802073637423,
+   "spectral_norm": 1.3889458179473877,
+   "stable_rank": 2.687365987578491,
+   "D": 0.06731043510049606
+  },
+  {
+   "layer_id": 74,
+   "name": "in_proj_a",
+   "alpha": 2.1411373527221036,
+   "alpha_weighted": 1.2921773173508802,
+   "spectral_norm": 4.013288974761963,
+   "stable_rank": 2.9793764399581915,
+   "D": 0.07580805233461207
+  },
+  {
+   "layer_id": 76,
+   "name": "gate_proj",
+   "alpha": 4.959553726453471,
+   "alpha_weighted": 7.208456300285026,
+   "spectral_norm": 28.408517837524414,
+   "stable_rank": 32.18515925877799,
+   "D": 0.032527797200789466
+  },
+  {
+   "layer_id": 77,
+   "name": "up_proj",
+   "alpha": 11.688615432481468,
+   "alpha_weighted": 0.02619908089750354,
+   "spectral_norm": 1.0051743984222412,
+   "stable_rank": 252.51970902392063,
+   "D": 0.062139668043575624
+  },
+  {
+   "layer_id": 78,
+   "name": "down_proj",
+   "alpha": 6.73932737823067,
+   "alpha_weighted": 2.2604943169264233,
+   "spectral_norm": 2.1648030281066895,
+   "stable_rank": 117.55617394185951,
+   "D": 0.03190234243365753
+  },
+  {
+   "layer_id": 86,
+   "name": "out_proj",
+   "alpha": 3.826993320740287,
+   "alpha_weighted": 2.010890461227462,
+   "spectral_norm": 3.3531205654144287,
+   "stable_rank": 89.13258506451189,
+   "D": 0.015971238199307014
+  },
+  {
+   "layer_id": 87,
+   "name": "in_proj_qkv",
+   "alpha": 3.178748180649361,
+   "alpha_weighted": 5.474260418915591,
+   "spectral_norm": 52.74040603637695,
+   "stable_rank": 38.12135096681244,
+   "D": 0.012645398796520602
+  },
+  {
+   "layer_id": 88,
+   "name": "in_proj_z",
+   "alpha": 4.027924913643707,
+   "alpha_weighted": 5.289923255890018,
+   "spectral_norm": 20.573694229125977,
+   "stable_rank": 28.21596640502473,
+   "D": 0.03369097939478327
+  },
+  {
+   "layer_id": 89,
+   "name": "in_proj_b",
+   "alpha": 1.7034554234804573,
+   "alpha_weighted": 0.3228570750429551,
+   "spectral_norm": 1.547143816947937,
+   "stable_rank": 2.4363702945505614,
+   "D": 0.12069302743938853
+  },
+  {
+   "layer_id": 90,
+   "name": "in_proj_a",
+   "alpha": 2.1298239143926287,
+   "alpha_weighted": 1.2248163006691892,
+   "spectral_norm": 3.7590548992156982,
+   "stable_rank": 2.508525423832148,
+   "D": 0.07315892317510142
+  },
+  {
+   "layer_id": 92,
+   "name": "gate_proj",
+   "alpha": 5.055899435614912,
+   "alpha_weighted": 6.775781888315504,
+   "spectral_norm": 21.8863525390625,
+   "stable_rank": 36.831386408270454,
+   "D": 0.027218077885848957
+  },
+  {
+   "layer_id": 93,
+   "name": "up_proj",
+   "alpha": 10.411989711467829,
+   "alpha_weighted": 0.24265644544156956,
+   "spectral_norm": 1.055128812789917,
+   "stable_rank": 251.49677944102217,
+   "D": 0.05450675912645775
+  },
+  {
+   "layer_id": 94,
+   "name": "down_proj",
+   "alpha": 6.076400741982108,
+   "alpha_weighted": 2.533461939752904,
+   "spectral_norm": 2.6117682456970215,
+   "stable_rank": 100.58417768669041,
+   "D": 0.025773613213268654
+  },
+  {
+   "layer_id": 102,
+   "name": "out_proj",
+   "alpha": 4.330378196545265,
+   "alpha_weighted": 2.739093825813067,
+   "spectral_norm": 4.290717601776123,
+   "stable_rank": 72.6356934236342,
+   "D": 0.037242549373261546
+  },
+  {
+   "layer_id": 103,
+   "name": "in_proj_qkv",
+   "alpha": 3.1664594952272176,
+   "alpha_weighted": 4.7537306404405335,
+   "spectral_norm": 31.71584701538086,
+   "stable_rank": 58.44850751963317,
+   "D": 0.01818819143261119
+  },
+  {
+   "layer_id": 104,
+   "name": "in_proj_z",
+   "alpha": 3.4825722170054263,
+   "alpha_weighted": 5.004137132208968,
+   "spectral_norm": 27.34691619873047,
+   "stable_rank": 19.84201079463079,
+   "D": 0.019422058896581995
+  },
+  {
+   "layer_id": 105,
+   "name": "in_proj_b",
+   "alpha": 1.8317332380031413,
+   "alpha_weighted": 0.671134141949746,
+   "spectral_norm": 2.3248393535614014,
+   "stable_rank": 2.0650167597088958,
+   "D": 0.04778148765473722
+  },
+  {
+   "layer_id": 106,
+   "name": "in_proj_a",
+   "alpha": 2.095471340725342,
+   "alpha_weighted": 1.0682394405943303,
+   "spectral_norm": 3.2343335151672363,
+   "stable_rank": 2.6169989660747803,
+   "D": 0.06184079589578484
+  },
+  {
+   "layer_id": 108,
+   "name": "gate_proj",
+   "alpha": 4.554066102535982,
+   "alpha_weighted": 5.957985265672982,
+   "spectral_norm": 20.336591720581055,
+   "stable_rank": 35.652645099649085,
+   "D": 0.031119474397594105
+  },
+  {
+   "layer_id": 109,
+   "name": "up_proj",
+   "alpha": 6.808685398179424,
+   "alpha_weighted": 2.194827171078153,
+   "spectral_norm": 2.100665807723999,
+   "stable_rank": 128.6298106433576,
+   "D": 0.0471871042266071
+  },
+  {
+   "layer_id": 110,
+   "name": "down_proj",
+   "alpha": 6.150709673763488,
+   "alpha_weighted": 1.6674266846049093,
+   "spectral_norm": 1.8667880296707153,
+   "stable_rank": 139.13969725610553,
+   "D": 0.05860065606565579
+  },
+  {
+   "layer_id": 116,
+   "name": "q_proj",
+   "alpha": 3.1541141498117518,
+   "alpha_weighted": 5.916764845168421,
+   "spectral_norm": 75.14290618896484,
+   "stable_rank": 13.53483187803435,
+   "D": 0.0218537699229846
+  },
+  {
+   "layer_id": 117,
+   "name": "k_proj",
+   "alpha": 3.82677191051878,
+   "alpha_weighted": 0.29690129284012584,
+   "spectral_norm": 1.1955983638763428,
+   "stable_rank": 50.03821930454937,
+   "D": 0.06298010565936685
+  },
+  {
+   "layer_id": 118,
+   "name": "v_proj",
+   "alpha": 9.649493121861303,
+   "alpha_weighted": -0.7089946207025011,
+   "spectral_norm": 0.8443552255630493,
+   "stable_rank": 89.05275320428795,
+   "D": 0.056919379034538586
+  },
+  {
+   "layer_id": 119,
+   "name": "o_proj",
+   "alpha": 3.266090118409269,
+   "alpha_weighted": 2.0458630052743145,
+   "spectral_norm": 4.230533599853516,
+   "stable_rank": 63.516450548357014,
+   "D": 0.03951476555261829
+  },
+  {
+   "layer_id": 123,
+   "name": "gate_proj",
+   "alpha": 4.101742164980534,
+   "alpha_weighted": 4.887991864730826,
+   "spectral_norm": 15.54843807220459,
+   "stable_rank": 37.93120717376182,
+   "D": 0.021265849898904232
+  },
+  {
+   "layer_id": 124,
+   "name": "up_proj",
+   "alpha": 6.959134928703141,
+   "alpha_weighted": 0.5101984656530218,
+   "spectral_norm": 1.1838958263397217,
+   "stable_rank": 232.5879113955569,
+   "D": 0.03480920770931911
+  },
+  {
+   "layer_id": 125,
+   "name": "down_proj",
+   "alpha": 5.507085245175829,
+   "alpha_weighted": 2.522714662599247,
+   "spectral_norm": 2.8713443279266357,
+   "stable_rank": 91.4512016462598,
+   "D": 0.031822056034258694
+  },
+  {
+   "layer_id": 133,
+   "name": "out_proj",
+   "alpha": 3.724292980183004,
+   "alpha_weighted": 2.229016349106932,
+   "spectral_norm": 3.967411518096924,
+   "stable_rank": 71.30881769931254,
+   "D": 0.04122908431892275
+  },
+  {
+   "layer_id": 134,
+   "name": "in_proj_qkv",
+   "alpha": 3.3521343626307205,
+   "alpha_weighted": 5.867306797955016,
+   "spectral_norm": 56.275543212890625,
+   "stable_rank": 33.11908502494184,
+   "D": 0.02010287436824454
+  },
+  {
+   "layer_id": 135,
+   "name": "in_proj_z",
+   "alpha": 3.2504777234270654,
+   "alpha_weighted": 4.793324838338433,
+   "spectral_norm": 29.82994270324707,
+   "stable_rank": 15.589092817108838,
+   "D": 0.025653423896624117
+  },
+  {
+   "layer_id": 136,
+   "name": "in_proj_b",
+   "alpha": 1.8918105773551632,
+   "alpha_weighted": 0.30060040082413675,
+   "spectral_norm": 1.441768765449524,
+   "stable_rank": 2.170097659807616,
+   "D": 0.07785034003893598
+  },
+  {
+   "layer_id": 137,
+   "name": "in_proj_a",
+   "alpha": 1.8110816097024975,
+   "alpha_weighted": 0.8546354851059469,
+   "spectral_norm": 2.9640963077545166,
+   "stable_rank": 2.8836937897095,
+   "D": 0.0776030330816117
+  },
+  {
+   "layer_id": 139,
+   "name": "gate_proj",
+   "alpha": 4.102378294215362,
+   "alpha_weighted": 4.404490322078937,
+   "spectral_norm": 11.84794807434082,
+   "stable_rank": 43.186985342664116,
+   "D": 0.03336641716436062
+  },
+  {
+   "layer_id": 140,
+   "name": "up_proj",
+   "alpha": 6.134580612465249,
+   "alpha_weighted": 0.6243006256589111,
+   "spectral_norm": 1.26405930519104,
+   "stable_rank": 213.53244643401763,
+   "D": 0.029379495914987785
+  },
+  {
+   "layer_id": 141,
+   "name": "down_proj",
+   "alpha": 4.967877680360605,
+   "alpha_weighted": 1.9929986616008772,
+   "spectral_norm": 2.5187036991119385,
+   "stable_rank": 99.460311691122,
+   "D": 0.05050773437812678
+  },
+  {
+   "layer_id": 149,
+   "name": "out_proj",
+   "alpha": 3.1627841604378073,
+   "alpha_weighted": 2.46628358345829,
+   "spectral_norm": 6.022578239440918,
+   "stable_rank": 45.30744587514158,
+   "D": 0.045645609422139855
+  },
+  {
+   "layer_id": 150,
+   "name": "in_proj_qkv",
+   "alpha": 3.1682900166987333,
+   "alpha_weighted": 4.612442508110816,
+   "spectral_norm": 28.563701629638672,
+   "stable_rank": 59.1062273941744,
+   "D": 0.030022300243569555
+  },
+  {
+   "layer_id": 151,
+   "name": "in_proj_z",
+   "alpha": 3.160658329471293,
+   "alpha_weighted": 4.548610752499862,
+   "spectral_norm": 27.48741912841797,
+   "stable_rank": 16.46960038588567,
+   "D": 0.033668671349740276
+  },
+  {
+   "layer_id": 152,
+   "name": "in_proj_b",
+   "alpha": 1.6342675696901328,
+   "alpha_weighted": 0.4708468191216049,
+   "spectral_norm": 1.941372036933899,
+   "stable_rank": 2.7655400428153203,
+   "D": 0.0857306792570649
+  },
+  {
+   "layer_id": 153,
+   "name": "in_proj_a",
+   "alpha": 1.9705391867141313,
+   "alpha_weighted": 1.2178012809917498,
+   "spectral_norm": 4.1495795249938965,
+   "stable_rank": 2.5938838349641857,
+   "D": 0.08493199163343415
+  },
+  {
+   "layer_id": 155,
+   "name": "gate_proj",
+   "alpha": 4.284347939139064,
+   "alpha_weighted": 3.946309499063277,
+   "spectral_norm": 8.338716506958008,
+   "stable_rank": 51.97578656252766,
+   "D": 0.027241185875640617
+  },
+  {
+   "layer_id": 156,
+   "name": "up_proj",
+   "alpha": 5.1488029080784115,
+   "alpha_weighted": 0.9629662841929192,
+   "spectral_norm": 1.5382510423660278,
+   "stable_rank": 178.49538938332822,
+   "D": 0.037061817346419834
+  },
+  {
+   "layer_id": 157,
+   "name": "down_proj",
+   "alpha": 3.9915728848693046,
+   "alpha_weighted": 1.9428719095892422,
+   "spectral_norm": 3.067209482192993,
+   "stable_rank": 83.27518954411434,
+   "D": 0.043451649296143924
+  },
+  {
+   "layer_id": 165,
+   "name": "out_proj",
+   "alpha": 3.171069826053563,
+   "alpha_weighted": 2.529195605603955,
+   "spectral_norm": 6.274575233459473,
+   "stable_rank": 46.65385958692726,
+   "D": 0.03700964921142935
+  },
+  {
+   "layer_id": 166,
+   "name": "in_proj_qkv",
+   "alpha": 3.3672336664927234,
+   "alpha_weighted": 4.916212305265866,
+   "spectral_norm": 28.841323852539062,
+   "stable_rank": 60.464659781676595,
+   "D": 0.04275403782524101
+  }
+ ],
+ "secs": 153
+}

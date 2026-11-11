@@ -1,0 +1,39 @@
+{
+ "cfg": {
+  "set": "ww_hi",
+  "lam": 3,
+  "scale": 2,
+  "devrank": [
+   1,
+   2,
+   4,
+   8,
+   16
+  ]
+ },
+ "rows": [
+  {
+   "label": "dev-rank1",
+   "constrained": false,
+   "n": 40,
+   "plan_pass": 36,
+   "draft_pass": 0,
+   "plan_parts": {
+    "json": 40,
+    "schema": 40,
+    "params": 40,
+    "covers": 36
+   },
+   "draft_parts": {
+    "json": 35,
+    "schema": 0,
+    "length": 0,
+    "no_numerals": 0,
+    "keys": 0
+   },
+   "secs": 243.8,
+   "rel_norm": 0.01532,
+   "values_changed": 27648
+  }
+ ]
+}

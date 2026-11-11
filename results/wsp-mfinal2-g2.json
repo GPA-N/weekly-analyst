@@ -1,0 +1,77 @@
+{
+ "cfg": {
+  "set": "ww_hi",
+  "lam": 3,
+  "scale": 2,
+  "rank": 8,
+  "seeds": [
+   200,
+   240
+  ],
+  "modes": [
+   "lowrank_plan",
+   "base"
+  ],
+  "ib": true
+ },
+ "results": {
+  "lowrank_plan": {
+   "label": "fresh-lowrank_plan",
+   "constrained": false,
+   "n": 80,
+   "plan_pass": 80,
+   "draft_pass": 73,
+   "plan_parts": {
+    "json": 80,
+    "schema": 80,
+    "params": 80,
+    "covers": 80
+   },
+   "draft_parts": {
+    "json": 73,
+    "schema": 73,
+    "length": 73,
+    "no_numerals": 73,
+    "keys": 73
+   },
+   "secs": 347.1,
+   "fail_samples": [
+    "{\n  \"headline\": \"Basic Units Decline in North Region\",\n  \"recommended_action\": \"Monitor Web Channel\",\n  \"findings[\":\n    {\n      \"item_key\": \"units|2027-W03|region=north,product=basic,channel=store\",\n      \"so_what\": \"Units Decrease\",\n      \"metric_refs\": [\n        \"units\"\n      ]\n    },\n    {\n     ",
+    "{\n  \"headline\": \"Basic Units Decline in North Region\",\n  \"recommended_action\": \"Monitor Web Channel\",\n  \"findings[\":\n    {\n      \"item_key\": \"units|2026-W40|region=north,product=basic,channel=store\",\n      \"so_what\": \"Units Decrease\",\n      \"metric_refs\": [\n        \"units\"\n      ]\n    },\n    {\n     ",
+    "{\n  \"headline\": \"Basic Units Decline in North Region\",\n  \"recommended_action\": \"Monitor Web Channel\",\n  \"findings[\":\n    {\n      \"item_key\": \"units|2026-W42|region=north,product=basic,channel=store\",\n      \"so_what\": \"Units Decrease\",\n      \"metric_refs\": [\n        \"units\"\n      ]\n    },\n    {\n     "
+   ]
+  },
+  "base": {
+   "label": "fresh-base",
+   "constrained": false,
+   "n": 80,
+   "plan_pass": 62,
+   "draft_pass": 0,
+   "plan_parts": {
+    "json": 80,
+    "schema": 80,
+    "params": 80,
+    "covers": 62
+   },
+   "draft_parts": {
+    "json": 80,
+    "schema": 0,
+    "length": 0,
+    "no_numerals": 0,
+    "keys": 0
+   },
+   "secs": 354.1,
+   "fail_samples": [
+    "{\n  \"headline\": \"North region shows revenue growth for basic and pro products\",\n  \"recommended_action\": \"Monitor basic and pro products in North region\",\n  \"finding\": {\n    \"item_key\": \"revenue|2026-W53|region=north,product=basic,channel=store\",\n    \"so_what\": \"Revenue increases\",\n    \"metric_refs\":",
+    "{\n  \"cold_start\": false,\n  \"headline\": \"Units Decline in North Region\",\n  \"recommended_action\": \"Monitor Channels\",\n  \"finding\": {\n    \"item_key\": \"units|2026-W53|region=north,product=basic,channel=store\",\n    \"so_what\": \"Units Decrease\",\n    \"metric_refs\": \"units\",\n    \"caveats\": \"Down in North Reg",
+    "{\n  \"headline\": \"North region shows revenue growth for basic and pro products\",\n  \"recommended_action\": \"Monitor basic and pro products in North region\",\n  \"finding\": {\n    \"item_key\": \"revenue|2027-W01|region=north,product=basic,channel=store\",\n    \"so_what\": \"Revenue increases\",\n    \"metric_refs\":"
+   ]
+  }
+ },
+ "ib_lowrank_plan": {
+  "label": "ib-lowrank-plan",
+  "n": 100,
+  "rougeL": 0.1331,
+  "mean_words": 31.5
+ }
+}

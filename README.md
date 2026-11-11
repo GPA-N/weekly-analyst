@@ -42,7 +42,9 @@ MiniCPM-V 4.7 (1B, f16) runs locally through llama.cpp. It understands the reque
 
 ## A small weight edit, found without training
 
-We edited 16,384 values (about 0.001% of the model) in two MLP layers. The direction came from the agent's own good and failing plan outputs, the columns were ranked by attribution, and the settings were chosen on separate dev seeds. On 80 held-out tasks, plans went from 64/80 to 80/80 with no grammar, and a random direction of the same size did nothing. The Space applies the edit as a 66 KB patch (`assets/edit_patch.npz`) to the official f16 GGUF at start; set `WEEKLY_ANALYST_EDIT=0` for the unedited model. Method and limits are in the [model card](https://huggingface.co/ewin-reg/MiniCPM-V-4.7-1B-weekly-analyst-edit); scripts are in `edit/`.
+We edited 16,384 values (about 0.001% of the model) in two MLP layers. The direction came from the agent's own good and failing plan outputs, the columns were ranked by attribution, and the settings were chosen on separate dev seeds. On 80 held-out tasks, plans went from 64/80 to 80/80 with no grammar, and a random direction of the same size did nothing. The Space applies the edit as a 66 KB patch (`assets/edit_patch.npz`) to the official f16 GGUF at start; set `WEEKLY_ANALYST_EDIT=0` for the unedited model. **Second edit, for drafts (measured 2026-11-11, not shipped).** Drafts scored 0/80 without a grammar because the draft prompt never shows the schema, so the base model invents keys. A closed-form MEMIT-style update of `down_proj` in six layers, fitted at the JSON positions where the model's top token is wrong, took drafts from 0/80 to 80/80 on 80 held-out tasks (seeds 100-139), and on fresh seeds 200-239 an edit plus the plan edit scored 80/80 plans and 75/80 drafts (base: 62/80 and 0/80; a random edit of the same size: 62/80 and 0/80). It changes about 2.6% of those matrices' norm, so it is much larger than the first edit (a rank-8 version is about 221,000 values). Adding the schema to the prompt text also fixes the no-grammar case for the unedited model on dev (40/40), so this edit is research, not a necessity. Details, failed attempts and caveats: `results/wsp-draft-edit.md`.
+
+Method and limits are in the [model card](https://huggingface.co/ewin-reg/MiniCPM-V-4.7-1B-weekly-analyst-edit); scripts are in `edit/`.
 
 ## Problems we hit, and what fixed them
 
@@ -62,12 +64,13 @@ We edited 16,384 values (about 0.001% of the model) in two MLP layers. The direc
 | The Space repo has a 1 GB cap and the model is 2 GB | The app downloads the official GGUF at start and patches a copy. |
 | ZeroGPU Space: the agent run was killed with "GPU task aborted" and the host reported 192 CPUs, which thrashed llama.cpp (545 s) | The agent runs on CPU outside the GPU time cap with threads capped at 8; one tiny `@spaces.GPU` function stays so the Space starts. |
 | Gradio Spaces could not be created through the API on a free account (402) | The Space was created in the web UI and updated through the API. |
+| Drafts scored 0/80 without a grammar and the first edit did not help | Found by printing raw outputs: the draft prompt never shows the schema, so the model invents keys. Direction add/flip edits stayed at 0/40; a MEMIT-style closed-form edit fitted at the wrong JSON positions reached 80/80 held-out drafts (fresh seeds: 75/80 with the plan edit). |
 | Detector recall was 0.21 on holdout | Diagnosed on dev seeds: ranking alone reaches 0.61 recall at the top 3 for a 1.5x outlier (0.65 for z-score alone), so the strict minimum-change gate costs most of it. Not fixed yet. |
 
 ## Honest limits
 
 - Detection: recall 0.21 on the holdout replay at the quiet gate (the bar was 0.80), and 14% of quiet weeks raised an alert. We know why, we have not fixed it.
-- The weight-edit gain is on synthetic tasks, without a JSON grammar, from one greedy run. In production the agent uses a grammar and retries, so the gain there is probably smaller. The edit does not make drafts valid without a grammar.
+- The weight-edit gains are on synthetic tasks, without a JSON grammar, from one greedy run each. In production the agent uses a grammar and retries, so the gain there is probably smaller. The shipped 16,384-value edit does not make drafts valid without a grammar. A second, larger edit does (below), but it is only measured on the transformers model and is not yet applied to the GGUF the Space runs.
 - Not done yet: injection corpus against the real model, a second person scoring brief quality, a reliability report, a demo video, CUDA on the Space (the code supports it; it did not run on the GPU there).
 - Synthetic data only. Nothing is uploaded, and the source file is never modified.
 

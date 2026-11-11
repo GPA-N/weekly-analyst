@@ -1,0 +1,91 @@
+{
+ "cfg": {
+  "set": "ww_hi",
+  "lam": 3,
+  "scale": 2,
+  "mode": "random"
+ },
+ "energy_by_rank": {
+  "16": {
+   "1": 0.1205,
+   "2": 0.2266,
+   "4": 0.3645,
+   "8": 0.4738,
+   "16": 0.6088,
+   "32": 0.7697,
+   "64": 0.9081
+  },
+  "17": {
+   "1": 0.1269,
+   "2": 0.2193,
+   "4": 0.3331,
+   "8": 0.4477,
+   "16": 0.59,
+   "32": 0.7606,
+   "64": 0.9047
+  },
+  "18": {
+   "1": 0.1252,
+   "2": 0.1993,
+   "4": 0.3008,
+   "8": 0.417,
+   "16": 0.5739,
+   "32": 0.761,
+   "64": 0.9042
+  },
+  "20": {
+   "1": 0.1522,
+   "2": 0.2444,
+   "4": 0.3566,
+   "8": 0.4596,
+   "16": 0.6081,
+   "32": 0.7734,
+   "64": 0.9056
+  },
+  "21": {
+   "1": 0.1401,
+   "2": 0.2228,
+   "4": 0.3316,
+   "8": 0.4456,
+   "16": 0.5982,
+   "32": 0.7669,
+   "64": 0.9017
+  },
+  "22": {
+   "1": 0.1397,
+   "2": 0.2205,
+   "4": 0.3348,
+   "8": 0.4734,
+   "16": 0.6405,
+   "32": 0.7993,
+   "64": 0.9189
+  }
+ },
+ "rel_norm": 0.23753,
+ "result": {
+  "label": "hold-random",
+  "constrained": false,
+  "n": 80,
+  "plan_pass": 54,
+  "draft_pass": 0,
+  "plan_parts": {
+   "json": 80,
+   "schema": 80,
+   "params": 80,
+   "covers": 54
+  },
+  "draft_parts": {
+   "json": 80,
+   "schema": 0,
+   "length": 0,
+   "no_numerals": 0,
+   "keys": 0
+  },
+  "secs": 404.8
+ },
+ "fail_samples": [
+  "{\n  \"headline\": \"North region shows revenue growth across basic and pro products\",\n  \"recommended_action\": \"Monitor basic and pro product performance in North region\",\n  \"finding\": {\n    \"item_key\": \"revenue|2027-W02|region=north,product=basic,channel=store\",\n    \"so_what\": \"Revenue increases\",\n    ",
+  "{\n  \"cold_start\": false,\n  \"items\": [\n    {\n      \"item_key\": \"revenue|2027-W02|region=north,product=basic,channel=store\",\n      \"finding\": {\n        \"so_what\": \"revenue decreased\",\n        \"metric_refs\": \"revenue\"\n      },\n      \"caveats\": \"no change\"\n    },\n    {\n      \"item_key\": \"revenue|2027-W0",
+  "{\n  \"headline\": \"North region shows revenue growth across basic and pro products\",\n  \"recommended_action\": \"Monitor basic and pro product performance in North region\",\n  \"finding\": {\n    \"item_key\": \"revenue|2027-W03|region=north,product=basic,channel=store\",\n    \"so_what\": \"Revenue increases\",\n    "
+ ]
+}

@@ -1,0 +1,105 @@
+[
+ {
+  "label": "dev-base",
+  "pass": 0,
+  "n": 40,
+  "parts": {
+   "json": 40,
+   "schema": 0,
+   "length": 0,
+   "no_numerals": 0,
+   "keys": 0
+  },
+  "fail_sample": "{\n  \"headline\": \"North region shows revenue growth for basic and pro products\",\n  \"recommended_action\": \"Monitor basic and pro products in North region\",\n  \"finding\": {\n    \"item_key\": \"revenue|2026-W43|region=north,product=basic,channel=store\",\n    \"so_what\": \"Revenue increases\",\n    \"metric_refs\":"
+ },
+ {
+  "label": "memit-mid_late-lam0.3-s1",
+  "pass": 16,
+  "n": 40,
+  "parts": {
+   "json": 40,
+   "schema": 16,
+   "length": 16,
+   "no_numerals": 16,
+   "keys": 16
+  },
+  "fail_sample": "{\n  \"headline\": \"North region shows revenue growth for basic and pro products\",\n  \"recommended_action\": \"Monitor basic and pro products in North region\",\n  \"findings\": [\n    {\n      \"item_key\": \"revenue|2026-W43|region=north,product=basic,channel=store\",\n      \"so_what\": \"Revenue increases\",\n      \"",
+  "rel_norm": 0.0148,
+  "elapsed": 199
+ },
+ {
+  "label": "memit-mid_late-lam0.3-s2",
+  "pass": 40,
+  "n": 40,
+  "parts": {
+   "json": 40,
+   "schema": 40,
+   "length": 40,
+   "no_numerals": 40,
+   "keys": 40
+  },
+  "fail_sample": "",
+  "rel_norm": 0.02961,
+  "elapsed": 275
+ },
+ {
+  "label": "memit-mid_late-lam0.3-s4",
+  "pass": 40,
+  "n": 40,
+  "parts": {
+   "json": 40,
+   "schema": 40,
+   "length": 40,
+   "no_numerals": 40,
+   "keys": 40
+  },
+  "fail_sample": "",
+  "rel_norm": 0.05921,
+  "elapsed": 352
+ },
+ {
+  "label": "memit-mid_late-lam3-s1",
+  "pass": 15,
+  "n": 40,
+  "parts": {
+   "json": 40,
+   "schema": 15,
+   "length": 15,
+   "no_numerals": 15,
+   "keys": 15
+  },
+  "fail_sample": "{\n  \"headline\": \"North region shows revenue growth for basic and pro products\",\n  \"recommended_action\": \"Monitor basic and pro products in North region\",\n  \"findings\": [\n    {\n      \"item_key\": \"revenue|2026-W43|region=north,product=basic,channel=store\",\n      \"so_what\": \"Revenue increases\",\n      \"",
+  "rel_norm": 0.01434,
+  "elapsed": 438
+ },
+ {
+  "label": "memit-mid_late-lam3-s2",
+  "pass": 40,
+  "n": 40,
+  "parts": {
+   "json": 40,
+   "schema": 40,
+   "length": 40,
+   "no_numerals": 40,
+   "keys": 40
+  },
+  "fail_sample": "",
+  "rel_norm": 0.02868,
+  "elapsed": 513
+ },
+ {
+  "label": "memit-mid_late-lam3-s4",
+  "pass": 39,
+  "n": 40,
+  "parts": {
+   "json": 39,
+   "schema": 39,
+   "length": 39,
+   "no_numerals": 39,
+   "keys": 39
+  },
+  "fail_sample": "{\n  \"headline\": \"Basic Units Decline in North Region\",\n  \"recommended_action\": \"Monitor Web Channel\",\n  \"findings[\":\n    {\n      \"item_key\": \"units|2026-W41|region=north,product=basic,channel=store\",\n      \"so_what\": \"Units Decrease\",\n      \"metric_refs\": [\n        \"units\"\n      ]\n    },\n    {\n     ",
+  "rel_norm": 0.05736,
+  "elapsed": 590
+ }
+]

@@ -1,0 +1,90 @@
+[
+ {
+  "label": "dev-base",
+  "pass": 0,
+  "n": 40,
+  "parts": {
+   "json": 40,
+   "schema": 0,
+   "length": 0,
+   "no_numerals": 0,
+   "keys": 0
+  },
+  "fail_sample": "{\n  \"headline\": \"North region shows revenue growth for basic and pro products\",\n  \"recommended_action\": \"Monitor basic and pro products in North region\",\n  \"finding\": {\n    \"item_key\": \"revenue|2026-W43|region=north,product=basic,channel=store\",\n    \"so_what\": \"Revenue increases\",\n    \"metric_refs\":"
+ },
+ {
+  "label": "memit-ww_hi-lam0.3-s1",
+  "pass": 19,
+  "n": 40,
+  "parts": {
+   "json": 40,
+   "schema": 19,
+   "length": 19,
+   "no_numerals": 19,
+   "keys": 19
+  },
+  "fail_sample": "{\n  \"headline\": \"North region shows revenue growth for basic and pro products\",\n  \"recommended_action\": \"Monitor basic and pro products in North region\",\n  \"findings\": [\n    {\n      \"item_key\": \"revenue|2026-W43|region=north,product=basic,channel=store\",\n      \"so_what\": \"Revenue increases\",\n      \"",
+  "rel_norm": 0.01319,
+  "elapsed": 217
+ },
+ {
+  "label": "memit-ww_hi-lam0.3-s2",
+  "pass": 40,
+  "n": 40,
+  "parts": {
+   "json": 40,
+   "schema": 40,
+   "length": 40,
+   "no_numerals": 40,
+   "keys": 40
+  },
+  "fail_sample": "",
+  "rel_norm": 0.02638,
+  "elapsed": 295
+ },
+ {
+  "label": "memit-ww_hi-lam0.3-s4",
+  "pass": 40,
+  "n": 40,
+  "parts": {
+   "json": 40,
+   "schema": 40,
+   "length": 40,
+   "no_numerals": 40,
+   "keys": 40
+  },
+  "fail_sample": "",
+  "rel_norm": 0.05275,
+  "elapsed": 374
+ },
+ {
+  "label": "memit-ww_hi-lam3-s1",
+  "pass": 15,
+  "n": 40,
+  "parts": {
+   "json": 40,
+   "schema": 15,
+   "length": 15,
+   "no_numerals": 15,
+   "keys": 15
+  },
+  "fail_sample": "{\n  \"headline\": \"North region shows revenue growth for basic and pro products\",\n  \"recommended_action\": \"Monitor basic and pro products in North region\",\n  \"findings\": [\n    {\n      \"item_key\": \"revenue|2026-W43|region=north,product=basic,channel=store\",\n      \"so_what\": \"Revenue increases\",\n      \"",
+  "rel_norm": 0.01311,
+  "elapsed": 470
+ },
+ {
+  "label": "memit-ww_hi-lam3-s2",
+  "pass": 40,
+  "n": 40,
+  "parts": {
+   "json": 40,
+   "schema": 40,
+   "length": 40,
+   "no_numerals": 40,
+   "keys": 40
+  },
+  "fail_sample": "",
+  "rel_norm": 0.02622,
+  "elapsed": 548
+ }
+]

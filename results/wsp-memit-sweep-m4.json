@@ -1,0 +1,90 @@
+[
+ {
+  "label": "dev-base",
+  "pass": 0,
+  "n": 40,
+  "parts": {
+   "json": 40,
+   "schema": 0,
+   "length": 0,
+   "no_numerals": 0,
+   "keys": 0
+  },
+  "fail_sample": "{\n  \"headline\": \"North region shows revenue growth for basic and pro products\",\n  \"recommended_action\": \"Monitor basic and pro products in North region\",\n  \"finding\": {\n    \"item_key\": \"revenue|2026-W43|region=north,product=basic,channel=store\",\n    \"so_what\": \"Revenue increases\",\n    \"metric_refs\":"
+ },
+ {
+  "label": "memit-ww_lo-lam0.3-s1",
+  "pass": 17,
+  "n": 40,
+  "parts": {
+   "json": 40,
+   "schema": 17,
+   "length": 17,
+   "no_numerals": 17,
+   "keys": 17
+  },
+  "fail_sample": "{\n  \"headline\": \"North region shows revenue growth for basic and pro products\",\n  \"recommended_action\": \"Monitor basic and pro products in North region\",\n  \"findings\": [\n    {\n      \"item_key\": \"revenue|2026-W43|region=north,product=basic,channel=store\",\n      \"so_what\": \"Revenue increases\",\n      \"",
+  "rel_norm": 0.03375,
+  "elapsed": 204
+ },
+ {
+  "label": "memit-ww_lo-lam0.3-s2",
+  "pass": 33,
+  "n": 40,
+  "parts": {
+   "json": 33,
+   "schema": 33,
+   "length": 33,
+   "no_numerals": 33,
+   "keys": 33
+  },
+  "fail_sample": "{\n  \"headline\": \"North region basic store revenue down\",\n  \"recommended_action\": \"Monitor web channel\",\n  \"findings[\": \"revenue|2026-W47|region=north,product=basic,channel=store\",\n    \"so-what\": \"Revenue decline in basic store\",\n    \"metric_refs\": [\n      \"revenue\"\n    ]\n  ],\n  \"findings[\": \"revenue",
+  "rel_norm": 0.0675,
+  "elapsed": 283
+ },
+ {
+  "label": "memit-ww_lo-lam0.3-s4",
+  "pass": 27,
+  "n": 40,
+  "parts": {
+   "json": 27,
+   "schema": 27,
+   "length": 27,
+   "no_numerals": 27,
+   "keys": 27
+  },
+  "fail_sample": "{\n  \"headline\": \"North region basic store revenue down\",\n  \"recommended_action\": \"Monitor web channel\",\n  \"findings[\":{\n    \"item_key\": \"revenue|2026-W43|region=north,product=basic,channel=store\",\n    \"so-what\": \"Identify revenue trends\",\n    \"metric_refs\": [\n      \"revenue\"\n    ]\n  },\n  \"findings[\"",
+  "rel_norm": 0.13501,
+  "elapsed": 366
+ },
+ {
+  "label": "memit-ww_lo-lam3-s1",
+  "pass": 13,
+  "n": 40,
+  "parts": {
+   "json": 40,
+   "schema": 13,
+   "length": 13,
+   "no_numerals": 13,
+   "keys": 13
+  },
+  "fail_sample": "{\n  \"headline\": \"North region shows revenue growth for basic and pro products\",\n  \"recommended_action\": \"Monitor basic and pro products in North region\",\n  \"findings\": [\n    {\n      \"item_key\": \"revenue|2026-W43|region=north,product=basic,channel=store\",\n      \"so_what\": \"Revenue increases\",\n      \"",
+  "rel_norm": 0.0322,
+  "elapsed": 454
+ },
+ {
+  "label": "memit-ww_lo-lam3-s2",
+  "pass": 30,
+  "n": 40,
+  "parts": {
+   "json": 30,
+   "schema": 30,
+   "length": 30,
+   "no_numerals": 30,
+   "keys": 30
+  },
+  "fail_sample": "{\n  \"headline\": \"North region basic store revenue declines\",\n  \"recommended_action\": \"Monitor web channel\",\n  \"findings[\": \"revenue|2026-W45|region=north,product=basic,channel=store\",\n    \"so-what\": \"Revenue decreases\",\n    \"metric_refs\": [\n      \"revenue\"\n    ]\n  ],\n  \"findings[\": \"revenue|2026-W45",
+  "rel_norm": 0.06439,
+  "elapsed": 532
+ }
+]
