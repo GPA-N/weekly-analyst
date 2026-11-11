@@ -3,7 +3,7 @@
 Defaults (peft): r=8, alpha=8, dropout 0. Non-defaults, none yet proven: lr 2e-4 (the LoRA/QLoRA papers' convention; peft has no lr), batch 1 with
 4-step accumulation, targets limited to mlp.down_proj of every language-model layer so the result merges into a dense delta that the existing
 GGUF patch route (weight_patch.add_delta) can apply.
-Data: CAL gold plans (plain prompt) and CAL gold drafts under the plain wording, the production repair line and TUNE_WORDINGS. REWORD is never trained on.
+Data: CAL gold plans (plain prompt) and CAL gold drafts under the plain wording, the production repair line and FIT_WORDINGS (TUNE_WORDINGS plus composed paraphrases). HELD wordings are never trained on.
 Select: epoch with the most DEV passes (plan plain + drafts under plain and tune wordings), ties by lower DEV loss. Score: score_once on SCORE seeds.
 Logged per epoch: loss on CAL and DEV (a big CAL drop with a flat DEV loss is the overfit signal). Env CFG: {"epochs": 6, "r": 8, "lr": 2e-4}.
 Checkpoints (adapter, optimizer, epoch, history) go to the runs dataset every epoch and are pulled on start.

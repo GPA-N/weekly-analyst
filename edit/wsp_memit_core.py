@@ -49,7 +49,7 @@ def collect_items(items, layers):
     vals = {l: [] for l in layers}
     cov = {l: torch.zeros(3584, 3584, device="cuda") for l in layers}
     cnt = {l: 0 for l in layers}
-    n_err = 0
+    n_err = n_skip = 0
     for t in items:
         prompt, comp = t["prompt"], t["comp"]
         ids, p = _ids(prompt, comp)
@@ -70,11 +70,18 @@ def collect_items(items, layers):
             return hook
 
         hooks = [LM.layers[l].mlp.down_proj.register_forward_pre_hook(mk(l)) for l in layers]
+        oom = False
         try:
             out = m(inputs_embeds=emb, output_hidden_states=True)
+        except torch.OutOfMemoryError:
+            oom = True  # a very long prompt in the slow fallback attention path: skip this item, keep going
         finally:
             for h in hooks:
                 h.remove()
+        if oom:
+            n_skip += 1
+            torch.cuda.empty_cache()
+            continue
         lg = out.logits[0, p - 1:p - 1 + n].float()
         gold = ids[0, p:p + n] if t.get("target") is None else t["target"].to(lg.device)
         top = lg.argmax(-1)
@@ -87,7 +94,13 @@ def collect_items(items, layers):
         hs = out.hidden_states
         for l in layers:
             hs[l + 1].retain_grad()
-        margin[wrong].sum().backward()
+        try:
+            margin[wrong].sum().backward()
+        except torch.OutOfMemoryError:
+            n_skip += 1
+            del out, lg, emb, hs, margin
+            torch.cuda.empty_cache()
+            continue
         need = (MARGIN - margin[wrong]).clamp(min=0)
         for l in layers:
             g = hs[l + 1].grad[0, p - 1:p - 1 + n][wrong].float()
@@ -99,8 +112,9 @@ def collect_items(items, layers):
         n_err += int(wrong.sum())
         del out, lg, emb, hs
         torch.cuda.empty_cache()
-    print("structural error positions", n_err, "over", len(items), "prompts", flush=True)
-    return {l: (torch.cat(keys[l]), torch.cat(vals[l]), cov[l], cnt[l]) for l in layers}
+    print("structural error positions", n_err, "over", len(items), "prompts;", n_skip, "skipped for memory", flush=True)
+    empty = lambda d: torch.zeros(0, d, device="cuda")  # a group can have no wrong position at all (e.g. plans the model already gets right)
+    return {l: (torch.cat(keys[l]) if keys[l] else empty(3584), torch.cat(vals[l]) if vals[l] else empty(1024), cov[l], cnt[l]) for l in layers}
 
 
 @torch.no_grad()

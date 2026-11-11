@@ -4,7 +4,7 @@ A low-rank module (A [r,3584], B [1024,r]) is attached to mlp.down_proj of the c
 but its values are not trained. They are edited in closed form (the MEMIT-style least-squares solve in wsp_memit_core.py: at the structural
 positions where the model ranks a gold token wrong, fit the residual shift) and then cut to rank r by SVD, so B = U sqrt(S), A = sqrt(S) V^T.
 Detach the hooks and the model is exactly the base model.
-Fit data: CAL gold plans and drafts under the plain wording, the repair line and TUNE_WORDINGS (REWORD stays held out). Select the rank on DEV with
+Fit data: CAL gold plans and drafts under the plain wording, the repair line and FIT_WORDINGS (HELD wordings stay held out). Select the rank on DEV with
 dev_eval(). Score once on SCORE with score_once. Env CFG: {"set": "ww_hi", "lam": 3, "scale": 2, "ranks": [4, 8, 16], "gammas": [1.0], "score": true}. With "score": false the stage
 only sweeps and saves; wsp_modscore.py then scores the one config picked on DEV, so SCORE is never used to choose between configs.
 lam 3, scale 2 and the layer set ww_hi were chosen on DEV earlier (colab/wsp_memit.py); they are carried over, not re-proven here.
