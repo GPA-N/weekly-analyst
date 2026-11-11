@@ -46,6 +46,7 @@ Failing drafts that were inspected show one token-level slip, for example the ke
 ## Limits that must be stated with these numbers
 
 - Synthetic tasks from one generator, one prompt template, one scorer that checks format (schema, length, no digits, item keys), not writing quality.
+- The edit is brittle to rewording of the instruction (0/40, see the OOD section).
 - The edit is dense inside six layers (a full 1024 by 3584 update each). The rank-8 form is about 221,000 values, not the 16,384 values of the first edit.
 - These edits are measured in the transformers (safetensors) model. They are NOT yet applied to the GGUF in the Space, and the live agent still runs the old 16,384-value patch.
 - Production decodes under a grammar, where drafts already pass, so the real-world gain from this edit is small; it matters for runs without a grammar.
@@ -59,7 +60,21 @@ Truncating the MEMIT update to rank r per layer (six layers): rank 1 scored 0/40
 Job o1 (`edit/wsp_onpolicy.py`): the model samples its own draft, the frozen base model with the schema in the prompt gives its top-1 token at every position of that text, and the MEMIT update is fitted where the two disagree on structural tokens, added to a running edit.
 Round 1: dev drafts 0/40, only 20/40 outputs were valid JSON (relative weight change 7.4%, three times the gold-fitted edit). Round 2: 0/40 and 28/40 valid JSON (9.5%). The edit damaged the output format without producing the schema. So this on-policy variant, as implemented, did not work and is not a fix for the 5 to 7 failing drafts. Possible reasons, not tested: the student's own text on the unedited model is a long way from the schema, so the teacher's top-1 at each position is a noisy target; one gradient step per position is a weak estimate when many positions are corrected at once. Files: `wsp-o1-onpolicy.json`.
 
+## Out-of-distribution prompts: the edit is brittle to rewording
+
+Job h2 (`edit/wsp_ood.py`), the gold-fitted edit (full dense update, six layers), fresh seeds 200 to 239, 40 tasks per variant, no grammar. The unedited base scored 0/40 on every variant.
+
+| Prompt variant | Drafts passing |
+|---|---|
+| Original prompt | 40/40 |
+| Evidence cut to one item | 40/40 |
+| Metrics, columns and segment values renamed | 40/40 |
+| Production re-request line appended | 32/40 |
+| Instruction paragraph reworded (same meaning, no key names spelled out) | 0/40 |
+
+The edit carries over to new data instances, a different item count and different names. It does not carry over to a rewritten instruction: on the reworded prompt only 28 of 40 outputs parse as JSON and none matches the schema (the one sample read began with the right keys; the end was not inspected, so the exact slip is not diagnosed). This is the prompt-wording overfitting that the editing papers describe (2410.07819) and that IWIBench saw for structured defaults (2611.08647). The reworded prompt also drops one cue sentence, so it is a hard test, not a neutral one. Fitting on many wordings was not tried. Conclusion: this edit is not a general "knows the schema" patch. The robust way to get valid drafts is the production route: the schema in the prompt text, or the grammar.
+
 ## Open at the time of writing
 
-- Out-of-distribution prompts (reworded instruction, the production re-request line, one evidence item, renamed metrics and segments): job h1 for base and the gold-fitted edit; the on-policy edit is checked after o1 finishes.
-- Applying the edit to the GGUF and re-running the live Space check.
+- The f16 GGUF with both edits (`colab/gguf_v2.py`, job on a Colab T4): it applies the plan patch and the dense delta to the official GGUF, checks the tensors, runs 24 fresh-seed drafts in llama-cpp-python 0.3.36 against the unedited GGUF, and uploads `MiniCPM-V-4_7-1B-weekly-analyst-v2-F16.gguf` plus `draft_edit_dw_fp16.pt` to the model repo only if at least 80% pass. Its result, if it finished, is `gguf_v2/gguf_v2.json` in the private dataset; if the model repo lacks the v2 file, the gate did not pass or the job did not finish. Nothing was verified when this was written.
+- Fitting on many instruction wordings (the likely fix for the brittleness), the Space integration, and the live check.

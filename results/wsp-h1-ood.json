@@ -1,0 +1,106 @@
+{
+ "cfg": {
+  "set": "ww_hi",
+  "seeds": [
+   200,
+   240
+  ],
+  "n": 40,
+  "base": true,
+  "gold": true
+ },
+ "n": 40,
+ "results": {
+  "base": {
+   "plain": {
+    "pass": 0,
+    "n": 40,
+    "parts": {
+     "json": 40,
+     "schema": 0,
+     "length": 0,
+     "no_numerals": 0,
+     "keys": 0
+    },
+    "fail_samples": [
+     "{\n  \"headline\": \"North region shows revenue growth for basic and pro products\",\n  \"recommended_action\": \"Monitor basic and pro products in North region\",\n  \"finding\": {\n    \"item_key\": \"revenue|2026-W",
+     "{\n  \"cold_start\": false,\n  \"headline\": \"Units Decline in North Region\",\n  \"recommended_action\": \"Monitor Channels\",\n  \"finding\": {\n    \"item_key\": \"units|2026-W53|region=north,product=basic,channel=st"
+    ]
+   },
+   "reword": {
+    "pass": 0,
+    "n": 40,
+    "parts": {
+     "json": 24,
+     "schema": 0,
+     "length": 0,
+     "no_numerals": 0,
+     "keys": 0
+    },
+    "fail_samples": [
+     "{\n  \"headline\": \"North Region Revenue Growth\",\n  \"recommended_action\": \"Monitor North Region channels\",\n  \"finding_1\": \"revenue\",\n  \"finding_1_metric\": \"region\",\n  \"finding_1_metric\": \"product\",\n  \"fi",
+     "{\n  \"headline\": \"Cold Start Reduction\",\n  \"recommended_action\": \"Review North Region Units\",\n  \"finding_1\": \"units\",\n  \"finding_2\": \"units\",\n  \"finding_3\": \"units\",\n  \"caveats\": \"Segments shifted down"
+    ]
+   },
+   "repair": {
+    "pass": 0,
+    "n": 40,
+    "parts": {
+     "json": 34,
+     "schema": 0,
+     "length": 0,
+     "no_numerals": 0,
+     "keys": 0
+    },
+    "fail_samples": [
+     "{\n  \"headline\": \"North Region Revenue Up\",\n  \"recommended_action\": \"Monitor Channels\",\n  \"finding\": {\n    \"item_key\": \"revenue|2026-W53|region=north,product=basic,channel=store\",\n    \"so_what\": \"Reven",
+     "{\n  \"headline\": \"Basic Units Decline\",\n  \"recommended_action\": \"Monitor Channels\",\n  \"finding\": {\n    \"item_key\": \"units|2026-W53|region=north,product=basic,channel=store\",\n    \"so_what\": \"Units Decre"
+    ]
+   },
+   "one_item": {
+    "pass": 0,
+    "n": 40,
+    "parts": {
+     "json": 40,
+     "schema": 0,
+     "length": 0,
+     "no_numerals": 0,
+     "keys": 0
+    },
+    "fail_samples": [
+     "{\n  \"cold_start\": false,\n  \"items\": [\n    {\n      \"item_key\": \"revenue|2026-W53|region=north,product=basic,channel=store\",\n      \"finding\": {\n        \"so_what\": \"Revenue increased\",\n        \"metric_re",
+     "{\n  \"cold_start\": false,\n  \"items\": [\n    {\n      \"item_key\": \"units|2026-W53|region=north,product=basic,channel=store\",\n      \"finding\": {\n        \"so_what\": \"units decreased\",\n        \"metric_refs\":"
+    ]
+   },
+   "renamed": {
+    "pass": 0,
+    "n": 40,
+    "parts": {
+     "json": 40,
+     "schema": 0,
+     "length": 0,
+     "no_numerals": 0,
+     "keys": 0
+    },
+    "fail_samples": [
+     "{\n  \"headline\": \"Increased Ticketing Across Alpha Team\",\n  \"recommended_action\": \"Adjust Desk Shift\",\n  \"finding\": {\n    \"item_key\": \"tickets|2026-W53|team=alpha,queue=standard,shift=desk\",\n    \"so_wh",
+     "{\n  \"cold_start\": false,\n  \"headline\": \"visits decrease across standard and chat shifts\",\n  \"recommended_action\": \"monitor standard and chat shifts\",\n  \"finding\": {\n    \"item_key\": \"visits|2026-W53|te"
+    ]
+   }
+  },
+  "gold": {
+   "plain": {
+    "pass": 40,
+    "n": 40,
+    "parts": {
+     "json": 40,
+     "schema": 40,
+     "length": 40,
+     "no_numerals": 40,
+     "keys": 40
+    },
+    "fail_samples": []
+   }
+  }
+ }
+}

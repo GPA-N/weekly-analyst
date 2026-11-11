@@ -1,0 +1,83 @@
+{
+ "cfg": {
+  "set": "ww_hi",
+  "seeds": [
+   200,
+   240
+  ],
+  "n": 40,
+  "base": false,
+  "gold": true
+ },
+ "n": 40,
+ "results": {
+  "gold": {
+   "plain": {
+    "pass": 40,
+    "n": 40,
+    "parts": {
+     "json": 40,
+     "schema": 40,
+     "length": 40,
+     "no_numerals": 40,
+     "keys": 40
+    },
+    "fail_samples": []
+   },
+   "reword": {
+    "pass": 0,
+    "n": 40,
+    "parts": {
+     "json": 28,
+     "schema": 0,
+     "length": 0,
+     "no_numerals": 0,
+     "keys": 0
+    },
+    "fail_samples": [
+     "{\n  \"headline\": \"North Region Revenue Growth\",\n  \"recommended_action\": \"Monitor North Region channels\",\n  \"findings\": [\n    {\n      \"item_key\": \"revenue|2026-W53|region=north,product=basic,channel=sto",
+     "{\n  \"headline\": \"Cold Start Reduction\",\n  \"recommended_action\": \"Optimize North Region Channels\",\n  \"findings\": [\n    {\n      \"item_key\": \"units|2026-W53|region=north,product=basic,channel=store\",\n   "
+    ]
+   },
+   "repair": {
+    "pass": 32,
+    "n": 40,
+    "parts": {
+     "json": 32,
+     "schema": 32,
+     "length": 32,
+     "no_numerals": 32,
+     "keys": 32
+    },
+    "fail_samples": [
+     "{\n  \"headline\": \"Basic Units Decline in North\",\n  \"recommended_action\": \"Monitor Web Channels\",\n  \"findings[\":\n    {\n      \"item_key\": \"units|2026-W53|region=north,product=basic,channel=store\",\n      ",
+     "{\n  \"headline\": \"Basic Units Decline in North\",\n  \"recommended_action\": \"Monitor Web Channels\",\n  \"findings[\":\n    {\n      \"item_key\": \"units|2026-W41|region=north,product=basic,channel=store\",\n      "
+    ]
+   },
+   "one_item": {
+    "pass": 40,
+    "n": 40,
+    "parts": {
+     "json": 40,
+     "schema": 40,
+     "length": 40,
+     "no_numerals": 40,
+     "keys": 40
+    },
+    "fail_samples": []
+   },
+   "renamed": {
+    "pass": 40,
+    "n": 40,
+    "parts": {
+     "json": 40,
+     "schema": 40,
+     "length": 40,
+     "no_numerals": 40,
+     "keys": 40
+    },
+    "fail_samples": []
+   }
+  }
+ }
+}

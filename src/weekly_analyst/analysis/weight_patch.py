@@ -30,3 +30,21 @@ def apply_patch(gguf_in: Path, patch_npz: Path, gguf_out: Path) -> list[int]:
     if hasattr(reader.data, "flush"):
         reader.data.flush()
     return layers
+
+
+def add_delta(gguf_path: Path, deltas: dict[int, np.ndarray]) -> None:
+    """Add a dense update to each `blk.{layer}.ffn_down.weight` of an f16 GGUF, in place (call it on a copy).
+
+    `deltas[layer]` has the tensor's shape [hidden, intermediate]; the sum is computed in float32 and rounded back to f16.
+    """
+    from gguf import GGUFReader
+
+    reader = GGUFReader(str(gguf_path), "r+")
+    by_name = {t.name: t for t in reader.tensors}
+    for layer, delta in deltas.items():
+        data = by_name[f"blk.{layer}.ffn_down.weight"].data
+        if data.dtype != np.float16 or data.shape != delta.shape:
+            raise ValueError(f"layer {layer}: tensor {data.dtype}{data.shape} does not fit the delta {delta.shape}")
+        data[...] = (data.astype(np.float32) + delta.astype(np.float32)).astype(np.float16)
+    if hasattr(reader.data, "flush"):
+        reader.data.flush()

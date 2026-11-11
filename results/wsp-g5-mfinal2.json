@@ -1,0 +1,59 @@
+{
+ "cfg": {
+  "set": "ww_hi",
+  "lam": 3,
+  "scale": 2,
+  "devrank": [
+   2,
+   4
+  ]
+ },
+ "rows": [
+  {
+   "label": "dev-rank2",
+   "constrained": false,
+   "n": 40,
+   "plan_pass": 36,
+   "draft_pass": 0,
+   "plan_parts": {
+    "json": 40,
+    "schema": 40,
+    "params": 40,
+    "covers": 36
+   },
+   "draft_parts": {
+    "json": 40,
+    "schema": 0,
+    "length": 0,
+    "no_numerals": 0,
+    "keys": 0
+   },
+   "secs": 221.1,
+   "rel_norm": 0.01821,
+   "values_changed": 55296
+  },
+  {
+   "label": "dev-rank4",
+   "constrained": false,
+   "n": 40,
+   "plan_pass": 36,
+   "draft_pass": 5,
+   "plan_parts": {
+    "json": 40,
+    "schema": 40,
+    "params": 40,
+    "covers": 36
+   },
+   "draft_parts": {
+    "json": 40,
+    "schema": 5,
+    "length": 5,
+    "no_numerals": 5,
+    "keys": 5
+   },
+   "secs": 201.4,
+   "rel_norm": 0.02152,
+   "values_changed": 110592
+  }
+ ]
+}
