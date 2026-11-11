@@ -50,9 +50,16 @@ Failing drafts that were inspected show one token-level slip, for example the ke
 - These edits are measured in the transformers (safetensors) model. They are NOT yet applied to the GGUF in the Space, and the live agent still runs the old 16,384-value patch.
 - Production decodes under a grammar, where drafts already pass, so the real-world gain from this edit is small; it matters for runs without a grammar.
 
+## Rank sweep (dev seeds 20-39, 40 tasks, no grammar)
+
+Truncating the MEMIT update to rank r per layer (six layers): rank 1 scored 0/40 drafts, rank 2 0/40, rank 4 5/40, rank 8 reached 73 to 80 of 80 on the held-out seeds. So rank 8 (about 221,000 values) is the smallest rank tested that works; rank 16 was not run (the session was lost). Plans stayed at the base level (36/40 on dev) in these truncated runs without the plan edit. Files: `wsp-g4-mfinal2.json` (rank 1) and `wsp-g5-mfinal2.json` (ranks 2 and 4).
+
+## On-policy rounds: a negative result
+
+Job o1 (`edit/wsp_onpolicy.py`): the model samples its own draft, the frozen base model with the schema in the prompt gives its top-1 token at every position of that text, and the MEMIT update is fitted where the two disagree on structural tokens, added to a running edit.
+Round 1: dev drafts 0/40, only 20/40 outputs were valid JSON (relative weight change 7.4%, three times the gold-fitted edit). Round 2: 0/40 and 28/40 valid JSON (9.5%). The edit damaged the output format without producing the schema. So this on-policy variant, as implemented, did not work and is not a fix for the 5 to 7 failing drafts. Possible reasons, not tested: the student's own text on the unedited model is a long way from the schema, so the teacher's top-1 at each position is a noisy target; one gradient step per position is a weak estimate when many positions are corrected at once. Files: `wsp-o1-onpolicy.json`.
+
 ## Open at the time of writing
 
-- On-policy rounds (the model samples its own draft, the base model with the schema in the prompt is the teacher, the edit is fitted where they disagree on structural tokens): job o1, results in `onpolicy.json` of the private dataset.
 - Out-of-distribution prompts (reworded instruction, the production re-request line, one evidence item, renamed metrics and segments): job h1 for base and the gold-fitted edit; the on-policy edit is checked after o1 finishes.
-- Smallest working rank: dev rank sweep (rank 1 gave 0/40 drafts); ranks 2, 4, 8, 16 were still running.
 - Applying the edit to the GGUF and re-running the live Space check.

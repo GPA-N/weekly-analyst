@@ -92,6 +92,11 @@
 </section>
 
 <section>
+  <h2>A second edit, for drafts (measured, not shipped)</h2>
+  <p>Drafts scored 0/80 without a grammar because the draft prompt never shows the schema, so the base model invents keys. Adding a direction to a few columns, the method of the first edit, stayed at 0/40 in every setting. A closed-form MEMIT-style update of <code>down_proj</code> in six layers, fitted at the JSON positions where the model's top token is wrong, took drafts from 0/80 to 80/80 on 80 held-out tasks. On fresh seeds that were never used for any choice, the edit plus the first edit scored 80/80 plans and 75/80 drafts (base 62/80 and 0/80; a random edit of the same norm stayed at 62/80 and 0/80). It changes about 2.6% of those matrices' norm, much more than the first edit, and the smallest rank that worked was 8 (about 221,000 values). An attempt to refit it on the model's own samples (on-policy) damaged the output format and failed. It is not applied to the Space, whose grammar already makes drafts pass. Details and failed attempts: <a href="https://github.com/GPA-N/weekly-analyst/blob/main/results/wsp-draft-edit.md">results/wsp-draft-edit.md</a>.</p>
+</section>
+
+<section>
   <h2>Problems we hit, and what fixed them</h2>
   <table>
     <thead><tr><th>Problem</th><th>What we did</th></tr></thead>
@@ -105,6 +110,7 @@
       <tr><td>The converted edited GGUF would not load in llama-cpp-python 0.3.36</td><td>Ship the edit as a patch on the official GGUF, verified equal to the converted file on the edited tensors.</td></tr>
       <tr><td>Space repo cap is 1 GB, the model is 2 GB</td><td>Download the official GGUF at start and patch a copy.</td></tr>
       <tr><td>ZeroGPU killed the run ("GPU task aborted") and 192 reported CPUs thrashed llama.cpp</td><td>Run on CPU outside the GPU time cap, threads capped at 8, one tiny GPU function so the Space starts.</td></tr>
+      <tr><td>Drafts scored 0/80 without a grammar and the first edit did not help</td><td>Printed raw outputs: the schema is not in the prompt. Direction edits stayed at 0/40; a closed-form MEMIT-style edit reached 80/80 held-out drafts (75/80 on fresh seeds with the plan edit).</td></tr>
       <tr><td>Gradio Spaces could not be created by API on a free account (402)</td><td>Created in the web UI, updated through the API.</td></tr>
     </tbody>
   </table>
