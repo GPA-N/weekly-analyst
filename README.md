@@ -38,6 +38,7 @@ MiniCPM-V 4.7 (1B, f16) runs locally through llama.cpp. It understands the reque
 | Peak memory | 5.2 GB |
 | Test suite (full project) | 654 passed |
 | Weight edit, held-out plans (80 tasks, no grammar) | 64/80 to 80/80; a random edit of the same size stayed at 64/80 |
+| Small LoRA scored once on held-out seeds (not deployed) | plans 80/80, drafts 80/80 without a grammar; fails an instruction that omits the field names (0/40) |
 | Change detector, holdout recall at the quiet gate | 0.21 (95% interval 0.13 to 0.30), not good enough yet, see below |
 
 ## A small weight edit, found without training
@@ -67,11 +68,26 @@ Method and limits are in the [model card](https://huggingface.co/ewin-reg/MiniCP
 | Drafts scored 0/80 without a grammar and the first edit did not help | Found by printing raw outputs: the draft prompt never shows the schema, so the model invents keys. Direction add/flip edits stayed at 0/40; a MEMIT-style closed-form edit fitted at the wrong JSON positions reached 80/80 held-out drafts (fresh seeds: 75/80 with the plan edit). |
 | Detector recall was 0.21 on holdout | Diagnosed on dev seeds: ranking alone reaches 0.61 recall at the top 3 for a 1.5x outlier (0.65 for z-score alone), so the strict minimum-change gate costs most of it. Not fixed yet. |
 
+## Tune/score split, a LoRA, and a closed-form edit (2026-11-11)
+
+We reran the weight-edit work with a stricter protocol: edits are fitted on seeds 0 to 19, configs are chosen on seeds 20 to 39 (plus separate dev wordings), and each final candidate is scored once on never-touched seeds 300 to 339 through a ledger that refuses a second run of the same candidate. Prompt wordings are split three ways (fitted, used for selection, held out for scoring only).
+
+Measured once on the scoring seeds (no grammar, greedy, 80 tasks, 40 for each variant):
+
+| | Plans | Drafts, plain wording | Renamed data | Repair line | One item | Instruction without field names |
+|---|---|---|---|---|---|---|
+| Base model | 65/80 | 0/80 | 0/40 | 0/40 | 0/40 | 0/40 |
+| Small LoRA (rank 8 on every `down_proj`, 2 epochs) | 80/80 | 80/80 | 40/40 | 40/40 | 40/40 | 0/40 |
+
+The LoRA is not deployed: the Space still runs the 16,384-value plan edit. What fails is any instruction that does not name the JSON fields: the model then copies the `direction` key from the evidence instead of writing `so_what` and `metric_refs`. A closed-form, gradient-free edit with a larger scale fixes that wording on dev (20/20) but drops the plan step to 12/40 (base 36/40), so it is not usable. Details, configs and the papers we read are in [results/tune-score-lora.md](results/tune-score-lora.md).
+
 ## Honest limits
 
 - Detection: recall 0.21 on the holdout replay at the quiet gate (the bar was 0.80), and 14% of quiet weeks raised an alert. We know why, we have not fixed it.
 - The weight-edit gains are on synthetic tasks, without a JSON grammar, from one greedy run each. In production the agent uses a grammar and retries, so the gain there is probably smaller. The shipped 16,384-value edit does not make drafts valid without a grammar. A second, larger edit does (below), but it is only measured on the transformers model and is not yet applied to the GGUF the Space runs.
 - Not done yet: injection corpus against the real model, a second person scoring brief quality, a reliability report, a demo video, CUDA on the Space (the code supports it; it did not run on the GPU there).
+- The LoRA and closed-form results above are on synthetic tasks, one run each, 80 tasks scored once. Both fail an instruction that does not name the JSON fields (0/40 for the LoRA). Production keeps the fixed instruction and the grammar, so this case does not occur there.
+- The scored LoRA is not deployed to the Space or the GGUF.
 - Synthetic data only. Nothing is uploaded, and the source file is never modified.
 
 ## Run it
