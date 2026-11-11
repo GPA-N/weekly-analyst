@@ -80,7 +80,7 @@
       <tr><td>Automated tests</td><td>654 passing</td><td>unit, security and end-to-end tests with a stand-in model</td></tr>
       <tr><td>Weight edit (16,384 values, no training)</td><td>plans 64/80 to 80/80</td><td>80 held-out synthetic tasks, no grammar; a random edit of the same size stayed at 64/80; drafts stayed 0/80 without a grammar</td></tr>
       <tr><td>Live Space, spike scenario</td><td>draft in about 300 s, approve in 18 s</td><td>real model on the Space CPU, checked on 2026-11-10</td></tr>
-      <tr><td>Small LoRA, scored once on held-out seeds (not deployed)</td><td>plans 80/80, drafts 80/80</td><td>base 65/80 and 0/80, no grammar. An instruction that omits the field names still fails (0/40). A larger closed-form edit fixes that wording on dev but drops plans to 12/40</td></tr>
+      <tr><td>Small LoRA, scored once on held-out seeds (deployed on the Space)</td><td>plans 80/80, drafts 80/80</td><td>base 65/80 and 0/80, no grammar. An instruction that omits the field names still fails (0/40). A larger closed-form edit fixes that wording on dev but drops plans to 12/40</td></tr>
       <tr><td>Change detector, holdout recall</td><td>0.21 (interval 0.13 to 0.30)</td><td>below the 0.80 bar. On dev seeds the ranking alone reaches 0.61 at the top 3, so the strict quiet-week gate costs most of it. 14% of quiet weeks raised an alert. Not fixed yet</td></tr>
     </tbody>
   </table>

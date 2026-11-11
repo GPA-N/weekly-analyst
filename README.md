@@ -38,7 +38,7 @@ MiniCPM-V 4.7 (1B, f16) runs locally through llama.cpp. It understands the reque
 | Peak memory | 5.2 GB |
 | Test suite (full project) | 654 passed |
 | Weight edit, held-out plans (80 tasks, no grammar) | 64/80 to 80/80; a random edit of the same size stayed at 64/80 |
-| Small LoRA scored once on held-out seeds (not deployed) | plans 80/80, drafts 80/80 without a grammar; fails an instruction that omits the field names (0/40) |
+| Small LoRA scored once on held-out seeds (now deployed on the Space) | plans 80/80, drafts 80/80 without a grammar; fails an instruction that omits the field names (0/40) |
 | Change detector, holdout recall at the quiet gate | 0.21 (95% interval 0.13 to 0.30), not good enough yet, see below |
 
 ## A small weight edit, found without training
@@ -79,7 +79,7 @@ Measured once on the scoring seeds (no grammar, greedy, 80 tasks, 40 for each va
 | Base model | 65/80 | 0/80 | 0/40 | 0/40 | 0/40 | 0/40 |
 | Small LoRA (rank 8 on every `down_proj`, 2 epochs) | 80/80 | 80/80 | 40/40 | 40/40 | 40/40 | 0/40 |
 
-The LoRA is not deployed: the Space still runs the 16,384-value plan edit. What fails is any instruction that does not name the JSON fields: the model then copies the `direction` key from the evidence instead of writing `so_what` and `metric_refs`. A closed-form, gradient-free edit with a larger scale fixes that wording on dev (20/20) but drops the plan step to 12/40 (base 36/40), so it is not usable. Details, configs and the papers we read are in [results/tune-score-lora.md](results/tune-score-lora.md).
+The Space now runs the LoRA (as an f16 GGUF, `MiniCPM-V-4_7-1B-weekly-analyst-lora-F16.gguf` in the model repo; checked in llama.cpp on a T4: 24/24 plans and 24/24 drafts on 24 fresh tasks, against 4/8 and 0/8 for the official GGUF; live run on the Space: spike draft in 297 s, approve in 17 s). Set `WEEKLY_ANALYST_LORA=0` to fall back to the older 16,384-value plan edit. What fails is any instruction that does not name the JSON fields: the model then copies the `direction` key from the evidence instead of writing `so_what` and `metric_refs`. A closed-form, gradient-free edit with a larger scale fixes that wording on dev (20/20) but drops the plan step to 12/40 (base 36/40), so it is not usable. Details, configs and the papers we read are in [results/tune-score-lora.md](results/tune-score-lora.md).
 
 ## Honest limits
 
@@ -87,7 +87,7 @@ The LoRA is not deployed: the Space still runs the 16,384-value plan edit. What 
 - The weight-edit gains are on synthetic tasks, without a JSON grammar, from one greedy run each. In production the agent uses a grammar and retries, so the gain there is probably smaller. The shipped 16,384-value edit does not make drafts valid without a grammar. A second, larger edit does (below), but it is only measured on the transformers model and is not yet applied to the GGUF the Space runs.
 - Not done yet: injection corpus against the real model, a second person scoring brief quality, a reliability report, a demo video, CUDA on the Space (the code supports it; it did not run on the GPU there).
 - The LoRA and closed-form results above are on synthetic tasks, one run each, 80 tasks scored once. Both fail an instruction that does not name the JSON fields (0/40 for the LoRA). Production keeps the fixed instruction and the grammar, so this case does not occur there.
-- The scored LoRA is not deployed to the Space or the GGUF.
+- The Space runs the scored LoRA GGUF; the llama.cpp check used seeds 200 to 211, which are tuning data, so it shows the GGUF matches the safetensors result, not new held-out accuracy.
 - Synthetic data only. Nothing is uploaded, and the source file is never modified.
 
 ## Run it

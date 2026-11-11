@@ -36,4 +36,4 @@ The evidence items carry a field `direction`. When the instruction names no JSON
 
 - The layer set `ww_hi` came from one WeightWatcher run with `min_evals=10` and alpha above 9, which its documentation calls spurious (above 8). The choice is not validated.
 - Mid-layer sets (12 14 16 18 20 22 and eight cached layers) returned NaN deltas at scale 2; not resolved.
-- Nothing here is deployed to the Space or the GGUF.
+- Deployed: the LoRA GGUF (`MiniCPM-V-4_7-1B-weekly-analyst-lora-F16.gguf`, official f16 GGUF plus the merged delta; all other tensors identical) passed a llama.cpp check on a T4 (24/24 plans, 24/24 drafts on seeds 200 to 211, which are tuning data; official GGUF 4/8 and 0/8) and a live Space run (spike draft in 297 s, approve in 17 s). The closed-form edits are not deployed.

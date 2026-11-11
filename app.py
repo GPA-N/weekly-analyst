@@ -26,6 +26,8 @@ from weekly_analyst.demo import DemoRun, approve_demo, run_demo  # noqa: E402
 
 MODEL_REPO = "openbmb/MiniCPM-V-4.7-1B-gguf"
 MODEL_FILE = "MiniCPM-V-4_7-1B-F16.gguf"  # full precision on purpose: quantization degrades quality
+EDIT_REPO = "ewin-reg/MiniCPM-V-4.7-1B-weekly-analyst-edit"
+LORA_FILE = "MiniCPM-V-4_7-1B-weekly-analyst-lora-F16.gguf"  # WEEKLY_ANALYST_LORA=0 falls back to the 16,384-value plan patch
 N_CTX = 4096
 BASE = Path(tempfile.mkdtemp(prefix="weekly-analyst-"))
 EXAMPLES = HERE / "examples"
@@ -69,7 +71,11 @@ def _model_path() -> str:
 
 
 def _prepare_model() -> str:
-    """The official f16 GGUF, with the weight edit applied unless WEEKLY_ANALYST_EDIT=0 (the patch is tiny, the model is not)."""
+    """The f16 GGUF with the scored LoRA delta, or with the old plan patch if WEEKLY_ANALYST_LORA=0, or the official file if WEEKLY_ANALYST_EDIT=0."""
+    if os.environ.get("WEEKLY_ANALYST_EDIT", "1") != "0" and os.environ.get("WEEKLY_ANALYST_LORA", "1") == "1":
+        from huggingface_hub import hf_hub_download
+
+        return hf_hub_download(EDIT_REPO, LORA_FILE)  # official f16 GGUF plus the scored LoRA delta (all 24 down_proj layers)
     local = HERE / MODEL_FILE
     if local.exists():
         base = str(local)
