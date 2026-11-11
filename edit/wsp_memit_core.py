@@ -80,6 +80,8 @@ def collect_items(items, layers):
         top = lg.argmax(-1)
         wrong = (top != gold) & smask
         if int(wrong.sum()) == 0:
+            del out, lg, emb
+            torch.cuda.empty_cache()
             continue
         margin = lg.gather(1, gold[:, None])[:, 0] - lg.gather(1, top[:, None])[:, 0]
         hs = out.hidden_states
@@ -134,3 +136,22 @@ def dev_drafts(label, tasks=None, max_new=700):
     fails = [o for o, s in zip(out, sc) if not passed(s)]
     return {"label": label, "pass": sum(map(passed, sc)), "n": len(sc), "parts": {k: sum(s[k] for s in sc) for k in sc[0]},
             "fail_sample": (fails[0][:300] if fails else "")}
+
+
+@torch.no_grad()
+def struct_error_rate(tasks):
+    """Teacher-forced tuning loss proxy: share of structural completion positions of the gold drafts where the model's top-1 token is not
+    the gold token. Needs no generation. Compare it on CAL (the data the edit was fitted on) and DEV/HOLD: a big drop on CAL with
+    little drop elsewhere is the overfit signal."""
+    wrong = total = 0
+    for t in tasks:
+        ids, p = _ids(t["draft_prompt"], t["gold_draft"])
+        text = t["gold_draft"].replace("<|im_end|>", "") + "<|im_end|>"
+        enc = tok(text, add_special_tokens=False, return_offsets_mapping=True)
+        sm = _struct_chars(text)
+        smask = torch.tensor([any(sm[c] for c in range(a, b)) if b > a else True for a, b in enc["offset_mapping"]], device="cuda")
+        n = len(smask)
+        top = m(input_ids=ids).logits[0, p - 1:p - 1 + n].argmax(-1)
+        wrong += int(((top != ids[0, p:p + n]) & smask).sum())
+        total += int(smask.sum())
+    return round(wrong / max(total, 1), 4)
