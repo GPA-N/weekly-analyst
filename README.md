@@ -90,7 +90,7 @@ The Space now runs `lora3` (as an f16 GGUF, `MiniCPM-V-4_7-1B-weekly-analyst-lor
 
 ### A first real-data test
 
-We ran the real pipeline on the UCI Online Retail sheet (about 540,000 invoice rows, converted to our weekly CSV; registered or guest customers as the channel, cancellation invoices as returns) with the `lora3` GGUF on a T4 and the model output unconstrained. The model wrote a valid plan and draft each time. The pipeline halted on all three weeks because of a bug in our own code: the attribution rows showed a segment's contribution to the change, but the independent number check recomputes the segment's own change and refuses segments with fewer than 30 rows. We now show each segment's own change and leave out segments below that size (`attribution_rows` in `src/weekly_analyst/systems/report_findings.py`, covered by two unit tests in the full project's test suite). After the fix, all three weeks produced a full report. This is one dataset, one run per week, not a quality score. An earlier try on the Tableau Superstore sample stayed silent because its segments were far below the size minimum.
+We ran the real pipeline on the UCI Online Retail sheet (about 540,000 invoice rows, converted to our weekly CSV; registered or guest customers as the channel, cancellation invoices as returns) with the `lora3` GGUF on a T4 and the model output unconstrained. The model wrote a valid plan and draft each time. The pipeline halted on all three weeks because of a bug in our own code: the attribution rows showed a segment's contribution to the change, but the independent number check recomputes the segment's own change and refuses segments with fewer than 30 rows. We now show each segment's own change and leave out segments below that size (`attribution_rows` in `src/weekly_analyst/systems/report_findings.py`, covered by two unit tests in `tests/test_report_attribution.py` of the GitHub repo). After the fix, all three weeks produced a full report. This is one dataset, one run per week, not a quality score. An earlier try on the Tableau Superstore sample stayed silent because its segments were far below the size minimum.
 
 ## Honest limits
 
@@ -100,6 +100,10 @@ We ran the real pipeline on the UCI Online Retail sheet (about 540,000 invoice r
 - The LoRA results are on synthetic tasks from one generator, 80 tasks scored once per round. The first LoRA failed an instruction that did not name the JSON fields (0/40); round 2 fixed that. Dev wordings were written in the same session as the training wordings, so dev was optimistic; the fresh-seed score is the clean number.
 - The Space runs the round 2 GGUF; its llama.cpp check used unspent seeds 500 to 511 plus a held-out wording. The real-data test used one dataset and was not run on the Space.
 - Synthetic data only. Nothing is uploaded, and the source file is never modified.
+
+## Run the tests
+
+The full test suite is in `tests/` of the GitHub repo (with `eval/` and `pyproject.toml`): `pip install -e ".[dev]" && pytest`. It uses a stand-in model, not the real one, and takes about 10 minutes on a 12-core machine when split across processes (about 25 minutes in one process). On 2026-11-12: 656 passed, 2 skipped, 0 failed.
 
 ## Run it
 
