@@ -76,7 +76,7 @@ GGUF check (llama-cpp-python 0.3.36, T4, unspent seeds 500 to 511, greedy, no gr
 Data: the UCI Online Retail sheet, converted to our weekly CSV (country group as region, unit-price tercile as product, registered or guest customer as channel, cancellation invoices as returns; discount fixed at 0). 539,392 rows, 53 weeks, 21 segments, median 61 rows per segment per week. Run on a T4 with the `lora3` GGUF, model output unconstrained, three cutoff weeks.
 
 - Before the fix: valid plan and draft each time, but the pipeline halted on all three weeks with `wrong_number ... not confirmed by recompute`. Cause: the attribution rows showed each segment's contribution to the total change, while the independent number check recomputes the segment's own change and returns nothing for a segment with fewer than 30 rows. Mean-type metrics (return rate, discount) differ between contribution and own change; small segments produced `value None`.
-- Fix: `attribution_rows` shows each segment's own change and leaves out segments the check cannot recompute. Two unit tests added; the changed test files (report, checks, runner, demo run, approve, architecture, draft) passed.
+- Fix: `attribution_rows` shows each segment's own change and leaves out segments the check cannot recompute. Two unit tests added; the full suite passed (656 passed, 2 skipped, 0 failed).
 - After the fix: a full brief and PDF for 3 of 3 weeks.
 - An earlier run on the Tableau Superstore sample (2,000 orders, median 8 rows a week) stayed silent for all 7 cutoffs, correctly, because its segments are far under the size minimum.
 

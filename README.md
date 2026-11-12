@@ -37,7 +37,7 @@ MiniCPM-V 4.7 (1B, f16) runs locally through llama.cpp. It understands the reque
 | Real model, quiet week | silent in about 1 s |
 | Real model, spike or drop week | PDF draft in about 195 s on a 2-vCPU Colab, about 5 min on the Space; approve re-renders, re-checks and writes it to the sent folder |
 | Peak memory | 5.2 GB |
-| Test suite (full project) | 654 passed on 2026-11-11. After the 2026-11-12 number-check fix, the 7 affected test files (76 tests) and 2 new tests pass; a full rerun was started and had not finished |
+| Test suite (full project) | 656 passed, 2 skipped, 0 failed on 2026-11-12 (658 collected; includes 2 new tests for the number-check fix) |
 | Weight edit, held-out plans (80 tasks, no grammar) | 64/80 to 80/80; a random edit of the same size stayed at 64/80 |
 | Small LoRA, round 2 (`lora3`), scored once on held-out seeds 400 to 439 (deployed on the Space) | plans 80/80, drafts 80/80 and 40/40 on each of six variants without a grammar, including two held-out reworded instructions (unedited model: 65/80, 0/80, 0/40 each) |
 | First real-data test (UCI Online Retail, about 540,000 invoice rows, T4, model output unconstrained) | valid plan and draft each time; after we fixed a bug in our own number check, a full report for 3 of 3 weeks (it halted on all 3 before the fix) |
