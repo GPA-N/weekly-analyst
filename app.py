@@ -264,8 +264,9 @@ Set `WEEKLY_ANALYST_LORA=0` for the older 16,384-value plan edit.
 
 ### Honest limits
 - The scenarios on this Space and the reliability figures are synthetic. The one real-data test is described below.
-- For free SQL the 1B model got 21 of 30 questions right under a grammar, short of the 24 of 30 bar, so named,
-  parameterized queries are the main path and free SQL is a last resort.
+- For free SQL the unedited 1B model got 21 of 30 questions right under a grammar, short of the 24 of 30 bar, so named,
+  parameterized queries are the main path and free SQL is a last resort. That was measured before the LoRA; free SQL
+  was not re-measured with the LoRA model this Space runs.
 - Chart reading by the vision encoder is not claimed: the projector would not load in the runtime used.
 - CPU only here; Apple Silicon speed is untested.
 - The change detector's recall on the holdout replay is 0.21 (the bar was 0.80), and 14% of quiet weeks raised an alert.

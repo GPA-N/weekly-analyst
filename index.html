@@ -92,7 +92,7 @@
       <tr><td>Schema-valid plan JSON</td><td>50 of 50 (GPU), 10 of 10 (CPU)</td><td>official f16 model, library-default sampling, fixed seeds</td></tr>
       <tr><td>One model step on CPU</td><td>about 4.8 tokens/s, plan about 20 s, draft about 17 s</td><td>2-core CPU, peak memory 5.2 GB (bar: under 12 GB)</td></tr>
       <tr><td>Full run on CPU</td><td>about 195 s for a report, about 1 s when quiet</td><td>3 scenarios, real model, real approve (bar: under 20 minutes)</td></tr>
-      <tr><td>Free SQL written by the 1B model</td><td>21 of 30 with a grammar, 18 of 30 without</td><td>short of the 24 of 30 bar, so named queries are the main path and free SQL is a last resort</td></tr>
+      <tr><td>Free SQL written by the unedited 1B model</td><td>21 of 30 with a grammar, 18 of 30 without</td><td>short of the 24 of 30 bar, so named queries are the main path and free SQL is a last resort. Measured before the LoRA; not re-measured with <code>lora3</code></td></tr>
       <tr><td>Fine-tuned variant</td><td>not adopted</td><td>48 of 50 valid plans against 50 of 50, 4 to 9 times longer replies, 4 to 6 points lower on math and reading questions that are unlike its training data (inside the error bars)</td></tr>
       <tr><td>Injection attempts in data</td><td>62 of 62 contained</td><td>replayed against a stand-in model that obeys them; not yet repeated with the real model</td></tr>
       <tr><td>Automated tests</td><td>656 passing, 2 skipped, 0 failing (2026-11-12)</td><td>unit, security and end-to-end tests with a stand-in model; includes 2 new tests for the number-check fix</td></tr>
