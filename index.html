@@ -103,6 +103,16 @@
       <tr><td>Change detector, holdout recall</td><td>0.21 (interval 0.13 to 0.30)</td><td>below the 0.80 bar. On dev seeds the ranking alone reaches 0.61 at the top 3, so the strict quiet-week gate costs most of it. 14% of quiet weeks raised an alert. Not fixed yet</td></tr>
     </tbody>
   </table>
+  <h3>Round 2 benchmark, scored once (2026-11-12)</h3>
+  <p class="note">No grammar, greedy, 80 plan and draft tasks, 40 per variant. Round 2 on fresh seeds 400 to 439; the first LoRA on seeds 300 to 339. Wilson 95% lower bounds: about 0.95 for 80/80, 0.91 for 40/40. <code>reword</code> was added to the training wordings by decision, so it only tests new seeds; <code>reword_b</code> and <code>reword_c</code> were never trained on.</p>
+  <table>
+    <thead><tr><th></th><th>Plans</th><th>Drafts</th><th>Renamed data</th><th>Repair line</th><th>One item</th><th>Reword</th><th>Reword b (no field names)</th><th>Reword c</th></tr></thead>
+    <tbody>
+      <tr><td>Base model</td><td>65/80</td><td>0/80</td><td>0/40</td><td>0/40</td><td>0/40</td><td>0/40</td><td>0/40</td><td>0/40</td></tr>
+      <tr><td>First LoRA (2 epochs)</td><td>80/80</td><td>80/80</td><td>40/40</td><td>40/40</td><td>40/40</td><td>0/40</td><td>not scored</td><td>not scored</td></tr>
+      <tr><td><b>Round 2 LoRA <code>lora3</code></b></td><td><b>80/80</b></td><td><b>80/80</b></td><td>40/40</td><td>40/40</td><td>40/40</td><td>40/40</td><td>40/40</td><td>40/40</td></tr>
+    </tbody>
+  </table>
   <p class="note"><b>Not done yet:</b> a better detector gate, the 20-run consistency check, the injection corpus against the real model, a second person scoring brief quality, a reliability report, a general-capability check of the LoRA. Chart reading by the vision encoder is not claimed: the vision projector would not load in the runtime used. Everything here is synthetic data; Apple Silicon speed is untested.</p>
 </section>
 
