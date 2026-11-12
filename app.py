@@ -263,13 +263,13 @@ adopted: 48 of 50 valid plans, 4 to 9 times longer replies.
 Set `WEEKLY_ANALYST_LORA=0` for the older 16,384-value plan edit.
 
 ### Honest limits
-- Synthetic sales data only, so reliability figures are from synthetic replays.
+- The scenarios on this Space and the reliability figures are synthetic. The one real-data test is described below.
 - For free SQL the 1B model got 21 of 30 questions right under a grammar, short of the 24 of 30 bar, so named,
   parameterized queries are the main path and free SQL is a last resort.
 - Chart reading by the vision encoder is not claimed: the projector would not load in the runtime used.
 - CPU only here; Apple Silicon speed is untested.
 - The change detector's recall on the holdout replay is 0.21 (the bar was 0.80), and 14% of quiet weeks raised an alert.
-- The weight-edit results are synthetic, from one task generator, scored once. A first real-data test (the UCI Online
+- The LoRA and weight-edit scores are synthetic, from one task generator, scored once. A first real-data test (the UCI Online
   Retail sheet, about 540,000 invoice rows, run on a T4 and not on this Space) gave a valid plan and draft each time, and
   after we fixed a bug in our own number check the pipeline produced a full report for 3 of 3 weeks. Nothing has been
   measured for general capabilities beyond the agent's task.
