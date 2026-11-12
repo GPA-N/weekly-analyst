@@ -258,7 +258,7 @@ CPU through llama.cpp. It was scored once on never-touched synthetic seeds (400 
 80/80 and drafts 80/80 (the unedited model: 65/80 and 0/80), and 40/40 on each of six variants, including reworded
 instructions (the unedited model: 0/40 on each). Speed and memory were measured with the official file on a 2-core CPU:
 4.8 tokens per second, 5.2 GB peak memory, plan JSON valid in 10 of 10 trials (50 of 50 on GPU); a spike week took about
-297 s on this Space with the first LoRA file, which has the same size. An earlier gradient fine-tune was tested and not
+296 s on this Space with this file (approval took about 24 s). An earlier gradient fine-tune was tested and not
 adopted: 48 of 50 valid plans, 4 to 9 times longer replies.
 Set `WEEKLY_ANALYST_LORA=0` for the older 16,384-value plan edit.
 
@@ -297,10 +297,11 @@ with gr.Blocks(title="Weekly Analyst") as demo_app:
         approve_button.click(approve, inputs=key_state, outputs=[status, gallery, pdf_file, approve_button])
     with gr.Tab("Example reports (already run)"):
         gr.Markdown(
-            "These two reports were produced by this same code with the real model, on a 2-core CPU, then "
-            "approved with the real approve command."
+            "The first two reports (synthetic data) were produced by this same code with the real model and the earlier "
+            "plan edit, on a 2-core CPU, then approved with the real approve command. The third is real public data "
+            "(UCI Online Retail, week of 2011-12-04) made with the current LoRA model on a T4; its draft text is formulaic."
         )
-        for prefix, title in (("drop", "Sales drop"), ("spike", "Sales spike")):
+        for prefix, title in (("drop", "Sales drop"), ("spike", "Sales spike"), ("online-retail", "Real data: Online Retail, 2011-W48")):
             pages, pdf = example_files(prefix)
             gr.Markdown(f"#### {title}")
             gr.Gallery(value=pages, label=title, columns=3, height=420, object_fit="contain")

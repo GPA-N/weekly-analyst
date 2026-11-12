@@ -48,11 +48,12 @@
 
 <section>
   <h2>Real reports from the real model</h2>
-  <p class="note">Produced by this exact code with the f16 model on a 2-core Colab CPU, then approved with the real <code>approve</code> command. The data is synthetic sales data: eight identical weeks, then a changed week. Each run took about 3 minutes.</p>
+  <p class="note">The first three tabs were produced by this code with the f16 model plus the earlier 16,384-value plan edit on a 2-core Colab CPU (before the LoRA), then approved with the real <code>approve</code> command. Their data is synthetic sales data: eight identical weeks, then a changed week. Each run took about 3 minutes. The fourth tab is real data made with the current <code>lora3</code> model.</p>
   <div class="tabs" role="tablist">
     <button class="tab active" data-target="drop">Sales drop</button>
     <button class="tab" data-target="spike">Sales spike</button>
     <button class="tab" data-target="quiet">Quiet week</button>
+    <button class="tab" data-target="real">Real Excel data</button>
   </div>
   <div class="panel" id="drop">
     <p><a class="btn" href="examples/drop.pdf">Open the PDF</a></p>
@@ -73,6 +74,14 @@
   <div class="panel hidden" id="quiet">
     <p>When the newest week is unchanged, the agent ends after detection. There is no model call, no report and nothing in the outbox. On the real runs this took about 1 second.</p>
   </div>
+  <div class="panel hidden" id="real">
+    <p>A real public sheet, not synthetic: the UCI Online Retail data (about 540,000 invoice rows), week of 2011-12-04 (ISO 2011-W48), run with the <code>lora3</code> model on a T4 with the model output unconstrained. The draft text is formulaic; every number comes from checked code. <a class="btn" href="examples/online-retail-2011-w48.pdf">Open the PDF</a> <a href="examples/online-retail-model-replies.json">the model's raw replies</a></p>
+    <div class="pages">
+      <a href="examples/online-retail-p1.png"><img src="examples/online-retail-p1.png" alt="Online Retail report, page 1: executive summary" loading="lazy"></a>
+      <a href="examples/online-retail-p2.png"><img src="examples/online-retail-p2.png" alt="Online Retail report, page 2: first finding with chart" loading="lazy"></a>
+      <a href="examples/online-retail-p3.png"><img src="examples/online-retail-p3.png" alt="Online Retail report, page 3" loading="lazy"></a>
+    </div>
+  </div>
 </section>
 
 <section>
@@ -88,7 +97,7 @@
       <tr><td>Injection attempts in data</td><td>62 of 62 contained</td><td>replayed against a stand-in model that obeys them; not yet repeated with the real model</td></tr>
       <tr><td>Automated tests</td><td>656 passing, 2 skipped, 0 failing (2026-11-12)</td><td>unit, security and end-to-end tests with a stand-in model; includes 2 new tests for the number-check fix</td></tr>
       <tr><td>Weight edit (16,384 values, no training)</td><td>plans 64/80 to 80/80</td><td>80 held-out synthetic tasks, no grammar; a random edit of the same size stayed at 64/80; drafts stayed 0/80 without a grammar</td></tr>
-      <tr><td>Live Space, spike scenario</td><td>draft in about 300 s, approve in 18 s</td><td>real model on the Space CPU, checked on 2026-11-10</td></tr>
+      <tr><td>Live Space, spike scenario</td><td>draft in about 296 s, approve in about 24 s</td><td>real model with <code>lora3</code> on the Space CPU, checked on 2026-11-12</td></tr>
       <tr><td>Small LoRA, round 2 (<code>lora3</code>), scored once on held-out seeds 400 to 439 (deployed on the Space)</td><td>plans 80/80, drafts 80/80, 40/40 on each of six variants</td><td>no grammar, greedy. Base 65/80, 0/80 and 0/40 on each variant. The variants include two held-out reworded instructions, one without field names. Synthetic tasks from one generator. The first LoRA failed an instruction without field names (0/40); round 2 fixed it with more training wordings. A closed-form edit fixed that wording on dev but dropped plans to 12/40</td></tr>
       <tr><td>First real-data test (UCI Online Retail, about 540,000 invoice rows)</td><td>valid plan and draft each time; full report for 3 of 3 weeks after a fix</td><td>T4, model output unconstrained. <a href="examples/online-retail-2011-w48.pdf">Example report (PDF)</a>, <a href="examples/online-retail-model-replies.json">the model's raw replies</a>; the draft text is formulaic, the numbers come from checked code. The pipeline halted on all 3 weeks until we fixed a bug in our own number check (it showed a segment's contribution but the check recomputes its own change, and it refuses segments under 30 rows). One dataset, one run per week, not a quality score</td></tr>
       <tr><td>Change detector, holdout recall</td><td>0.21 (interval 0.13 to 0.30)</td><td>below the 0.80 bar. On dev seeds the ranking alone reaches 0.61 at the top 3, so the strict quiet-week gate costs most of it. 14% of quiet weeks raised an alert. Not fixed yet</td></tr>
@@ -98,8 +107,8 @@
 </section>
 
 <section>
-  <h2>A small weight edit, found without training</h2>
-  <p>We changed 16,384 values, about 0.001% of the model, in two MLP layers. The direction came from the agent's own correct and failing plan outputs, the columns were ranked by how much they push along it, and the strength was chosen on separate dev seeds. On 80 held-out tasks plans went from 64/80 to 80/80 with no grammar. A random direction of the same size changed nothing. The Space applies the edit as a 66 KB patch to the official f16 model at start. Limits: synthetic tasks, no grammar, one greedy run, and production adds a grammar and retries, so the real gain is probably smaller. Details are in the <a href="https://huggingface.co/ewin-reg/MiniCPM-V-4.7-1B-weekly-analyst-edit">model card</a>.</p>
+  <h2>A small weight edit, found without training (the first edit, now superseded by the LoRA)</h2>
+  <p>We changed 16,384 values, about 0.001% of the model, in two MLP layers. The direction came from the agent's own correct and failing plan outputs, the columns were ranked by how much they push along it, and the strength was chosen on separate dev seeds. On 80 held-out tasks plans went from 64/80 to 80/80 with no grammar. A random direction of the same size changed nothing. The Space now runs the round 2 LoRA instead; this edit is still available there with <code>WEEKLY_ANALYST_LORA=0</code> as a 66 KB patch to the official f16 model. Limits: synthetic tasks, no grammar, one greedy run, and production adds a grammar and retries, so the real gain is probably smaller. Details are in the <a href="https://huggingface.co/ewin-reg/MiniCPM-V-4.7-1B-weekly-analyst-edit">model card</a>.</p>
 </section>
 
 <section>
@@ -134,11 +143,11 @@
 cd weekly-analyst
 pip install -r requirements.txt
 python app.py        # the first run downloads the 2 GB f16 model</pre>
-  <p>Set <code>WEEKLY_ANALYST_EDIT=0</code> to run the unedited model. For CUDA use <code>requirements.cuda.txt</code> (supported in code, not shown to use the GPU on the Space).</p>
+  <p>The default is the round 2 LoRA file from the model repo. Set <code>WEEKLY_ANALYST_LORA=0</code> for the older 16,384-value plan patch, or <code>WEEKLY_ANALYST_EDIT=0</code> for the unedited model. For CUDA use <code>requirements.cuda.txt</code> (supported in code, not shown to use the GPU on the Space).</p>
 </section>
 
 </main>
-<footer><div class="wrap">Weekly Analyst. Synthetic data only. Model: openbmb/MiniCPM-V-4.7-1B (f16 GGUF) with a 16,384-value patch.</div></footer>
+<footer><div class="wrap">Weekly Analyst. Synthetic data only. Model: openbmb/MiniCPM-V-4.7-1B (f16 GGUF) with a rank-8 LoRA merged into down_proj (lora3).</div></footer>
 <script>
 document.querySelectorAll('.tab').forEach(function (tab) {
   tab.addEventListener('click', function () {
