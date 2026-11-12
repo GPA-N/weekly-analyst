@@ -4,7 +4,7 @@
 
 Weekly Analyst is an autonomous data analyst that lives next to a file you replace every week. It runs fully on your machine, on CPU, with MiniCPM-V 4.7 (1B, full precision f16, no quantization). Built for the MiniCPM Spark Program, On-Device Agent Challenge.
 
-- Demo video (90 s, with sound): [media/weekly-analyst-demo.mp4](media/weekly-analyst-demo.mp4), also embedded on https://gpa-n.github.io/weekly-analyst/. **Outdated in two places:** it was cut before round 2, so it shows the first LoRA and still lists "fails an instruction that does not name the JSON fields (0/40)" as a limit, which round 2 fixed, and it has no real-data result. The reported scores, the model file and the limits below are the current ones. An updated cut is in progress.
+- Demo video (90 s, with sound): [media/weekly-analyst-demo.mp4](media/weekly-analyst-demo.mp4), also embedded on https://gpa-n.github.io/weekly-analyst/. Updated 2026-11-12: it shows the round 2 LoRA (`lora3`), the held-out scores, the first real-data test and the current limits.
 - Live demo: https://huggingface.co/spaces/ewin-reg/weekly-analyst (a spike or drop scenario takes about 5 minutes on the Space's CPU; a quiet week takes seconds)
 - Example reports: https://gpa-n.github.io/weekly-analyst/
 - Edited model: https://huggingface.co/ewin-reg/MiniCPM-V-4.7-1B-weekly-analyst-edit
@@ -96,7 +96,7 @@ We ran the real pipeline on the UCI Online Retail sheet (about 540,000 invoice r
 
 - Detection: recall 0.21 on the holdout replay at the quiet gate (the bar was 0.80), and 14% of quiet weeks raised an alert. We know why, we have not fixed it.
 - The weight-edit gains are on synthetic tasks, without a JSON grammar, from one greedy run each. In production the agent uses a grammar and retries, so the gain there is probably smaller. The 16,384-value plan edit does not make drafts valid without a grammar; the LoRA does.
-- Not done yet: injection corpus against the real model, a second person scoring brief quality, a reliability report, a general-capability regression check of the LoRA, a demo video that matches round 2, CUDA on the Space (the code supports it; it did not run on the GPU there).
+- Not done yet: injection corpus against the real model, a second person scoring brief quality, a reliability report, a general-capability regression check of the LoRA, CUDA on the Space (the code supports it; it did not run on the GPU there).
 - The LoRA results are on synthetic tasks from one generator, 80 tasks scored once per round. The first LoRA failed an instruction that did not name the JSON fields (0/40); round 2 fixed that. Dev wordings were written in the same session as the training wordings, so dev was optimistic; the fresh-seed score is the clean number.
 - The Space runs the round 2 GGUF; its llama.cpp check used unspent seeds 500 to 511 plus a held-out wording. The real-data test used one dataset and was not run on the Space.
 - Synthetic data only. Nothing is uploaded, and the source file is never modified.

@@ -29,9 +29,9 @@
   <h2>Watch it in 90 seconds</h2>
   <video controls preload="metadata" poster="media/poster.jpg" style="width:100%;border-radius:8px;background:#0F0E0C">
     <source src="media/weekly-analyst-demo.mp4" type="video/mp4">
-    Your browser cannot play this video. <a href="media/weekly-analyst-demo.mp4">Download it (21 MB).</a>
+    Your browser cannot play this video. <a href="media/weekly-analyst-demo.mp4">Download it (17.5 MB).</a>
   </video>
-  <p class="note"><b>Outdated in two places.</b> This video was cut before round 2. It shows the first LoRA and lists "fails an instruction that does not name the JSON fields (0/40)" as a limit, which round 2 fixed, and it has no real-data result. The table below has the current numbers; an updated cut is in progress. The rest (how the agent works, example report pages, the detector limit) is still accurate. Synthetic data.</p>
+  <p class="note">An animated walkthrough with sound, updated 2026-11-12: how the agent works, example report pages from earlier runs, the round 2 held-out scores, the first real-data test and the current limits. Synthetic data except the real-data test; the numbers are the ones listed below.</p>
 </section>
 
 <section>
@@ -94,7 +94,7 @@
       <tr><td>Change detector, holdout recall</td><td>0.21 (interval 0.13 to 0.30)</td><td>below the 0.80 bar. On dev seeds the ranking alone reaches 0.61 at the top 3, so the strict quiet-week gate costs most of it. 14% of quiet weeks raised an alert. Not fixed yet</td></tr>
     </tbody>
   </table>
-  <p class="note"><b>Not done yet:</b> a better detector gate, the 20-run consistency check, the injection corpus against the real model, a second person scoring brief quality, a reliability report, a general-capability check of the LoRA and a demo video that matches round 2. Chart reading by the vision encoder is not claimed: the vision projector would not load in the runtime used. Everything here is synthetic data; Apple Silicon speed is untested.</p>
+  <p class="note"><b>Not done yet:</b> a better detector gate, the 20-run consistency check, the injection corpus against the real model, a second person scoring brief quality, a reliability report, a general-capability check of the LoRA. Chart reading by the vision encoder is not claimed: the vision projector would not load in the runtime used. Everything here is synthetic data; Apple Silicon speed is untested.</p>
 </section>
 
 <section>
