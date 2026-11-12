@@ -31,7 +31,7 @@
     <source src="media/weekly-analyst-demo.mp4" type="video/mp4">
     Your browser cannot play this video. <a href="media/weekly-analyst-demo.mp4">Download it (21 MB).</a>
   </video>
-  <p class="note">An animated walkthrough with sound: how the agent works, example report pages from earlier runs, the measured results and the limits. Synthetic data; the numbers are the ones listed below.</p>
+  <p class="note"><b>Outdated in two places.</b> This video was cut before round 2. It shows the first LoRA and lists "fails an instruction that does not name the JSON fields (0/40)" as a limit, which round 2 fixed, and it has no real-data result. The table below has the current numbers; an updated cut is in progress. The rest (how the agent works, example report pages, the detector limit) is still accurate. Synthetic data.</p>
 </section>
 
 <section>
@@ -86,14 +86,15 @@
       <tr><td>Free SQL written by the 1B model</td><td>21 of 30 with a grammar, 18 of 30 without</td><td>short of the 24 of 30 bar, so named queries are the main path and free SQL is a last resort</td></tr>
       <tr><td>Fine-tuned variant</td><td>not adopted</td><td>48 of 50 valid plans against 50 of 50, 4 to 9 times longer replies, 4 to 6 points lower on math and reading questions that are unlike its training data (inside the error bars)</td></tr>
       <tr><td>Injection attempts in data</td><td>62 of 62 contained</td><td>replayed against a stand-in model that obeys them; not yet repeated with the real model</td></tr>
-      <tr><td>Automated tests</td><td>654 passing</td><td>unit, security and end-to-end tests with a stand-in model</td></tr>
+      <tr><td>Automated tests</td><td>654 passing on 2026-11-11; 76 plus 2 new passing after the 2026-11-12 fix</td><td>unit, security and end-to-end tests with a stand-in model. After the fix, only the 7 affected test files and the 2 new tests were rerun; the full rerun had not finished</td></tr>
       <tr><td>Weight edit (16,384 values, no training)</td><td>plans 64/80 to 80/80</td><td>80 held-out synthetic tasks, no grammar; a random edit of the same size stayed at 64/80; drafts stayed 0/80 without a grammar</td></tr>
       <tr><td>Live Space, spike scenario</td><td>draft in about 300 s, approve in 18 s</td><td>real model on the Space CPU, checked on 2026-11-10</td></tr>
-      <tr><td>Small LoRA, scored once on held-out seeds (deployed on the Space)</td><td>plans 80/80, drafts 80/80</td><td>base 65/80 and 0/80, no grammar. An instruction that omits the field names still fails (0/40). A larger closed-form edit fixes that wording on dev but drops plans to 12/40</td></tr>
+      <tr><td>Small LoRA, round 2 (<code>lora3</code>), scored once on held-out seeds 400 to 439 (deployed on the Space)</td><td>plans 80/80, drafts 80/80, 40/40 on each of six variants</td><td>no grammar, greedy. Base 65/80, 0/80 and 0/40 on each variant. The variants include two held-out reworded instructions, one without field names. Synthetic tasks from one generator. The first LoRA failed an instruction without field names (0/40); round 2 fixed it with more training wordings. A closed-form edit fixed that wording on dev but dropped plans to 12/40</td></tr>
+      <tr><td>First real-data test (UCI Online Retail, about 540,000 invoice rows)</td><td>valid plan and draft each time; full report for 3 of 3 weeks after a fix</td><td>T4, model output unconstrained. The pipeline halted on all 3 weeks until we fixed a bug in our own number check (it showed a segment's contribution but the check recomputes its own change, and it refuses segments under 30 rows). One dataset, one run per week, not a quality score</td></tr>
       <tr><td>Change detector, holdout recall</td><td>0.21 (interval 0.13 to 0.30)</td><td>below the 0.80 bar. On dev seeds the ranking alone reaches 0.61 at the top 3, so the strict quiet-week gate costs most of it. 14% of quiet weeks raised an alert. Not fixed yet</td></tr>
     </tbody>
   </table>
-  <p class="note"><b>Not done yet:</b> a better detector gate, the 20-run consistency check, the injection corpus against the real model, a second person scoring brief quality, a reliability report and a demo video. Chart reading by the vision encoder is not claimed: the vision projector would not load in the runtime used. Everything here is synthetic data; Apple Silicon speed is untested.</p>
+  <p class="note"><b>Not done yet:</b> a better detector gate, the 20-run consistency check, the injection corpus against the real model, a second person scoring brief quality, a reliability report, a general-capability check of the LoRA and a demo video that matches round 2. Chart reading by the vision encoder is not claimed: the vision projector would not load in the runtime used. Everything here is synthetic data; Apple Silicon speed is untested.</p>
 </section>
 
 <section>

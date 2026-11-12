@@ -20,7 +20,7 @@ final = {"best_epoch": best["epoch"], "epochs_trained": ck["epoch"], "hist": his
 ONLY = CFG.get("only")  # "base" or "lora" to run one half; both by default
 if ONLY in (None, "base"):
     try:
-        final["score_base"] = score_once("base")
+        final["score_base"] = score_once("base-s400")
     except RuntimeError as e:
         final["score_base"] = str(e)
 if ONLY in (None, "lora"):

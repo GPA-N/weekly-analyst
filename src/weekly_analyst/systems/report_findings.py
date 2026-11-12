@@ -28,9 +28,6 @@ def finding_for(ctx: RunContext, df: pl.DataFrame, item: Item, text) -> tuple[Fi
         raise Halt(f"{key}: too few rows to report")
     points = series(ctx, df, metric, segment)
     col = metric.segment_columns[0]
-    shares = attribute_change(
-        week(df, date_col, prev_period(item.period)), week(df, date_col, item.period), metric, col
-    )
     chart = ChartSpec(
         kind="line",
         title=f"{metric.name} by ISO week: {label}",
@@ -39,20 +36,14 @@ def finding_for(ctx: RunContext, df: pl.DataFrame, item: Item, text) -> tuple[Fi
         unit=metric.name,
         alt_text=f"Line of {metric.name} by ISO week for {label}; the latest week is last.",
     )
-    rows = [
-        AttributionRow(
-            segment=sanitize.label(str(r["segment"])),
-            change=ShownNumber(change_text(r["delta"]), metric.name, {col: str(r["segment"])}, item.period),
-        )
-        for r in shares.iter_rows(named=True)
-    ]
+    rows = attribution_rows(df, date_col, metric, col, item.period)
     finding = Finding(
         item_key=key,
         supporting=ShownNumber(level_text(level), metric.name, segment, item.period),
         so_what=text.so_what,
         chart=chart,
         attribution=rows,
-        interpretation=f"Each row is one {col} segment and its share of the change in {metric.name}.",
+        interpretation=f"Each row is one {col} segment and its own change in {metric.name} from the prior week.",
     )
     table = DataTable(
         item_key=key,
@@ -63,6 +54,22 @@ def finding_for(ctx: RunContext, df: pl.DataFrame, item: Item, text) -> tuple[Fi
         ],
     )
     return finding, table
+
+
+def attribution_rows(df: pl.DataFrame, date_col: str, metric, col: str, period: str) -> list[AttributionRow]:
+    """One row per segment value: that segment's own change from the prior week, ordered by its contribution to the total change.
+
+    A segment with fewer than min_rows_per_segment rows in either week is left out: the independent number check cannot recompute it, and one
+    unconfirmable number halts the whole brief. A mean-type metric's contribution is not the segment's own change, so the own change is shown.
+    """
+    prev = prev_period(period)
+    rows = []
+    for r in attribute_change(week(df, date_col, prev), week(df, date_col, period), metric, col).iter_rows(named=True):
+        segment = {col: str(r["segment"])}
+        now, before = compute(df, metric, segment, period), compute(df, metric, segment, prev)
+        if now is not None and before is not None:
+            rows.append(AttributionRow(segment=sanitize.label(str(r["segment"])), change=ShownNumber(change_text(now - before), metric.name, segment, period)))
+    return rows
 
 
 def series(ctx: RunContext, df: pl.DataFrame, metric, segment: dict) -> list[tuple[str, str, float]]:

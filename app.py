@@ -27,7 +27,7 @@ from weekly_analyst.demo import DemoRun, approve_demo, run_demo  # noqa: E402
 MODEL_REPO = "openbmb/MiniCPM-V-4.7-1B-gguf"
 MODEL_FILE = "MiniCPM-V-4_7-1B-F16.gguf"  # full precision on purpose: quantization degrades quality
 EDIT_REPO = "ewin-reg/MiniCPM-V-4.7-1B-weekly-analyst-edit"
-LORA_FILE = "MiniCPM-V-4_7-1B-weekly-analyst-lora-F16.gguf"  # WEEKLY_ANALYST_LORA=0 falls back to the 16,384-value plan patch
+LORA_FILE = "MiniCPM-V-4_7-1B-weekly-analyst-lora3-F16.gguf"  # round 2 file (the first LoRA file is still in the model repo); WEEKLY_ANALYST_LORA=0 falls back to the 16,384-value plan patch
 N_CTX = 4096
 BASE = Path(tempfile.mkdtemp(prefix="weekly-analyst-"))
 EXAMPLES = HERE / "examples"
@@ -254,10 +254,12 @@ findings with charts, risks and data quality, next checks, and appendices for de
 ### The model
 Official MiniCPM-V 4.7 1B in full precision (f16 GGUF, no quantization) plus one small change: a rank-8 LoRA
 merged into the `down_proj` weights of all 24 layers (every other tensor is identical to the official file). It runs on
-CPU through llama.cpp. On never-touched synthetic seeds, without a JSON grammar, the LoRA scored plans 80/80 and drafts
-80/80 (the unedited model: 65/80 and 0/80). Measured on a 2-core CPU with the official file: 4.8 tokens per second,
-5.2 GB peak memory, plan JSON valid in 10 of 10 trials (50 of 50 on GPU); a spike week took about 297 s on this Space
-with the LoRA. An earlier gradient fine-tune was tested and not adopted: 48 of 50 valid plans, 4 to 9 times longer replies.
+CPU through llama.cpp. It was scored once on never-touched synthetic seeds (400 to 439), without a JSON grammar: plans
+80/80 and drafts 80/80 (the unedited model: 65/80 and 0/80), and 40/40 on each of six variants, including reworded
+instructions (the unedited model: 0/40 on each). Speed and memory were measured with the official file on a 2-core CPU:
+4.8 tokens per second, 5.2 GB peak memory, plan JSON valid in 10 of 10 trials (50 of 50 on GPU); a spike week took about
+297 s on this Space with the first LoRA file, which has the same size. An earlier gradient fine-tune was tested and not
+adopted: 48 of 50 valid plans, 4 to 9 times longer replies.
 Set `WEEKLY_ANALYST_LORA=0` for the older 16,384-value plan edit.
 
 ### Honest limits
@@ -267,8 +269,10 @@ Set `WEEKLY_ANALYST_LORA=0` for the older 16,384-value plan edit.
 - Chart reading by the vision encoder is not claimed: the projector would not load in the runtime used.
 - CPU only here; Apple Silicon speed is untested.
 - The change detector's recall on the holdout replay is 0.21 (the bar was 0.80), and 14% of quiet weeks raised an alert.
-- The weight-edit results are synthetic, one run each. The LoRA still fails an instruction that does not name the JSON
-  fields (0/40); here the instruction is fixed and names them.
+- The weight-edit results are synthetic, from one task generator, scored once. A first real-data test (the UCI Online
+  Retail sheet, about 540,000 invoice rows, run on a T4 and not on this Space) gave a valid plan and draft each time, and
+  after we fixed a bug in our own number check the pipeline produced a full report for 3 of 3 weeks. Nothing has been
+  measured for general capabilities beyond the agent's task.
 """
 
 with gr.Blocks(title="Weekly Analyst") as demo_app:

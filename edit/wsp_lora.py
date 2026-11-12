@@ -71,6 +71,9 @@ def load_snapshot(s):
 
 train, cal_eval = tune_examples(CAL), [(t["plan_prompt"], t["gold_plan"]) for t in CAL[:10]] + [(t["draft_prompt"], t["gold_draft"]) for t in CAL[:10]]
 dev_eval_ex = [(t["plan_prompt"], t["gold_plan"]) for t in DEV[:10]] + [(t["draft_prompt"], t["gold_draft"]) for t in DEV[:10]]
+# loss per wording group: fit wordings without field names on CAL (low = fitted), the 3 held-out no-field-name wordings on DEV (high vs the first = overfit to wordings, both high = underfit)
+grp_eval = {"cal_nocue": [(reworded(t["draft_prompt"], w), t["gold_draft"]) for t in CAL[:5] for w in NOCUE_FIT[:3]],
+            "dev_nocue": [(reworded(t["draft_prompt"], w), t["gold_draft"]) for t in DEV[:5] for w in NOCUE_DEV]}
 hist, best, start = [], None, 0
 try:
     pull("lora_ckpt.pt")
@@ -84,7 +87,7 @@ except Exception as e:
 
 m.eval()  # no dropout in this LoRA; the base model stays in eval mode while A and B train
 if start == 0:
-    hist.append({"epoch": 0, "cal_loss": mean_loss(cal_eval), "dev_loss": mean_loss(dev_eval_ex), "dev": dev_eval()})
+    hist.append({"epoch": 0, "cal_loss": mean_loss(cal_eval), "dev_loss": mean_loss(dev_eval_ex), **{k: mean_loss(v) for k, v in grp_eval.items()}, "dev": dev_eval()})
     best = {"epoch": 0, "snap": snapshot(), "dev_total": hist[0]["dev"]["total"], "dev_loss": hist[0]["dev_loss"]}
     print(hist[-1], flush=True)
 
@@ -103,7 +106,7 @@ for ep in range(start + 1, EPOCHS + 1):
             scaler.step(opt)
             scaler.update()
             opt.zero_grad(set_to_none=True)
-    row = {"epoch": ep, "train_loss": round(run / len(train), 4), "cal_loss": mean_loss(cal_eval), "dev_loss": mean_loss(dev_eval_ex), "dev": dev_eval()}
+    row = {"epoch": ep, "train_loss": round(run / len(train), 4), "cal_loss": mean_loss(cal_eval), "dev_loss": mean_loss(dev_eval_ex), **{k: mean_loss(v) for k, v in grp_eval.items()}, "dev": dev_eval()}
     hist.append(row)
     if (row["dev"]["total"], -row["dev_loss"]) > (best["dev_total"], -best["dev_loss"]):
         best = {"epoch": ep, "snap": snapshot(), "dev_total": row["dev"]["total"], "dev_loss": row["dev_loss"]}
@@ -123,6 +126,11 @@ rel = apply_dw({l: d.float() for l, d in dws.items()})  # merged dense delta, th
 print("merged relative weight change", rel, "best epoch", best["epoch"], flush=True)
 
 final = {"cfg": CFG, "best_epoch": best["epoch"], "rel_norm": rel, "hist": hist}
+if not CFG.get("score", True):  # sweep runs: SCORE seeds are spent only on the one config chosen on DEV (wsp_lorascore.py)
+    json.dump(final, open("/content/out/lora_final.json", "w"), indent=1, default=str)
+    push("lora_final.json")
+    print("DONE-LORA (not scored)", {k: final[k] for k in ("best_epoch", "rel_norm")}, flush=True)
+    raise SystemExit
 try:
     final["score_base"] = None
     restore()

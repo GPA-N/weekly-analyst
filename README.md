@@ -4,7 +4,7 @@
 
 Weekly Analyst is an autonomous data analyst that lives next to a file you replace every week. It runs fully on your machine, on CPU, with MiniCPM-V 4.7 (1B, full precision f16, no quantization). Built for the MiniCPM Spark Program, On-Device Agent Challenge.
 
-- Demo video (90 s, with sound): [media/weekly-analyst-demo.mp4](media/weekly-analyst-demo.mp4), also embedded on https://gpa-n.github.io/weekly-analyst/
+- Demo video (90 s, with sound): [media/weekly-analyst-demo.mp4](media/weekly-analyst-demo.mp4), also embedded on https://gpa-n.github.io/weekly-analyst/. **Outdated in two places:** it was cut before round 2, so it shows the first LoRA and still lists "fails an instruction that does not name the JSON fields (0/40)" as a limit, which round 2 fixed, and it has no real-data result. The reported scores, the model file and the limits below are the current ones. An updated cut is in progress.
 - Live demo: https://huggingface.co/spaces/ewin-reg/weekly-analyst (a spike or drop scenario takes about 5 minutes on the Space's CPU; a quiet week takes seconds)
 - Example reports: https://gpa-n.github.io/weekly-analyst/
 - Edited model: https://huggingface.co/ewin-reg/MiniCPM-V-4.7-1B-weekly-analyst-edit
@@ -37,9 +37,10 @@ MiniCPM-V 4.7 (1B, f16) runs locally through llama.cpp. It understands the reque
 | Real model, quiet week | silent in about 1 s |
 | Real model, spike or drop week | PDF draft in about 195 s on a 2-vCPU Colab, about 5 min on the Space; approve re-renders, re-checks and writes it to the sent folder |
 | Peak memory | 5.2 GB |
-| Test suite (full project) | 654 passed |
+| Test suite (full project) | 654 passed on 2026-11-11. After the 2026-11-12 number-check fix, the 7 affected test files (76 tests) and 2 new tests pass; a full rerun was started and had not finished |
 | Weight edit, held-out plans (80 tasks, no grammar) | 64/80 to 80/80; a random edit of the same size stayed at 64/80 |
-| Small LoRA scored once on held-out seeds (now deployed on the Space) | plans 80/80, drafts 80/80 without a grammar; fails an instruction that omits the field names (0/40) |
+| Small LoRA, round 2 (`lora3`), scored once on held-out seeds 400 to 439 (deployed on the Space) | plans 80/80, drafts 80/80 and 40/40 on each of six variants without a grammar, including two held-out reworded instructions (unedited model: 65/80, 0/80, 0/40 each) |
+| First real-data test (UCI Online Retail, about 540,000 invoice rows, T4, model output unconstrained) | valid plan and draft each time; after we fixed a bug in our own number check, a full report for 3 of 3 weeks (it halted on all 3 before the fix) |
 | Change detector, holdout recall at the quiet gate | 0.21 (95% interval 0.13 to 0.30), not good enough yet, see below |
 
 ## A small weight edit, found without training
@@ -73,22 +74,31 @@ Method and limits are in the [model card](https://huggingface.co/ewin-reg/MiniCP
 
 We reran the weight-edit work with a stricter protocol: edits are fitted on seeds 0 to 19, configs are chosen on seeds 20 to 39 (plus separate dev wordings), and each final candidate is scored once on never-touched seeds 300 to 339 through a ledger that refuses a second run of the same candidate. Prompt wordings are split three ways (fitted, used for selection, held out for scoring only).
 
-Measured once on the scoring seeds (no grammar, greedy, 80 tasks, 40 for each variant):
+Measured once per candidate on never-touched scoring seeds (no grammar, greedy, 80 tasks, 40 for each variant). Round 1 was scored on seeds 300 to 339, round 2 on fresh seeds 400 to 439 (the first seeds were spent).
 
-| | Plans | Drafts, plain wording | Renamed data | Repair line | One item | Instruction without field names |
-|---|---|---|---|---|---|---|
-| Base model | 65/80 | 0/80 | 0/40 | 0/40 | 0/40 | 0/40 |
-| Small LoRA (rank 8 on every `down_proj`, 2 epochs) | 80/80 | 80/80 | 40/40 | 40/40 | 40/40 | 0/40 |
+| | Plans | Drafts, plain wording | Renamed data | Repair line | One item | Reworded, no field names | Held-out wording `reword_b` (no field names) | Held-out wording `reword_c` |
+|---|---|---|---|---|---|---|---|---|
+| Base model (seeds 400 to 439) | 65/80 | 0/80 | 0/40 | 0/40 | 0/40 | 0/40 | 0/40 | 0/40 |
+| First LoRA (rank 8 on every `down_proj`, 2 epochs; seeds 300 to 339) | 80/80 | 80/80 | 40/40 | 40/40 | 40/40 | 0/40 | not scored | not scored |
+| **Round 2 LoRA `lora3`** (same recipe, 4 epochs, many more instruction wordings; seeds 400 to 439) | **80/80** | **80/80** | 40/40 | 40/40 | 40/40 | 40/40 | 40/40 | 40/40 |
 
-The Space now runs the LoRA (as an f16 GGUF, `MiniCPM-V-4_7-1B-weekly-analyst-lora-F16.gguf` in the model repo; checked in llama.cpp on a T4: 24/24 plans and 24/24 drafts on 24 fresh tasks, against 4/8 and 0/8 for the official GGUF; live run on the Space: spike draft in 297 s, approve in 17 s). Set `WEEKLY_ANALYST_LORA=0` to fall back to the older 16,384-value plan edit. What fails is any instruction that does not name the JSON fields: the model then copies the `direction` key from the evidence instead of writing `so_what` and `metric_refs`. A closed-form, gradient-free edit with a larger scale fixes that wording on dev (20/20) but drops the plan step to 12/40 (base 36/40), so it is not usable. Details, configs and the papers we read are in [results/tune-score-lora.md](results/tune-score-lora.md).
+Wilson 95% lower bounds are about 0.95 for 80/80 and 0.91 for 40/40. `reword` was added to the training wordings by decision, so it only tests new seeds; `reword_b` and `reword_c` were never trained on.
+
+What changed in round 2: the first LoRA copied the `direction` key from the evidence when the instruction named no JSON fields. Adding training wordings that name no field fixed two of three held-out dev wordings; the third wrote `recommended_step` (the instruction's own word) instead of `recommended_action`, and eight synonym wordings plus one more epoch fixed it. We did not try the gradient-free LP edit on this problem, because the LoRA already passed.
+
+The Space now runs `lora3` (as an f16 GGUF, `MiniCPM-V-4_7-1B-weekly-analyst-lora3-F16.gguf` in the model repo; checked in llama.cpp on a T4 on unspent seeds 500 to 511: 24/24 plans, 24/24 drafts and 8/8 under `reword_b`, against official-GGUF drafts 0/8). Set `WEEKLY_ANALYST_LORA=0` to fall back to the older 16,384-value plan edit. The first LoRA file stays in the model repo. A closed-form, gradient-free edit with a larger scale fixed the no-field-name wording on dev (20/20) but dropped the plan step to 12/40 (base 36/40), so it was not used. Details, configs and the papers we read are in [results/tune-score-lora.md](results/tune-score-lora.md).
+
+### A first real-data test
+
+We ran the real pipeline on the UCI Online Retail sheet (about 540,000 invoice rows, converted to our weekly CSV; registered or guest customers as the channel, cancellation invoices as returns) with the `lora3` GGUF on a T4 and the model output unconstrained. The model wrote a valid plan and draft each time. The pipeline halted on all three weeks because of a bug in our own code: the attribution rows showed a segment's contribution to the change, but the independent number check recomputes the segment's own change and refuses segments with fewer than 30 rows. We now show each segment's own change and leave out segments below that size (`attribution_rows` in `src/weekly_analyst/systems/report_findings.py`, covered by two unit tests in the full project's test suite). After the fix, all three weeks produced a full report. This is one dataset, one run per week, not a quality score. An earlier try on the Tableau Superstore sample stayed silent because its segments were far below the size minimum.
 
 ## Honest limits
 
 - Detection: recall 0.21 on the holdout replay at the quiet gate (the bar was 0.80), and 14% of quiet weeks raised an alert. We know why, we have not fixed it.
-- The weight-edit gains are on synthetic tasks, without a JSON grammar, from one greedy run each. In production the agent uses a grammar and retries, so the gain there is probably smaller. The shipped 16,384-value edit does not make drafts valid without a grammar. A second, larger edit does (below), but it is only measured on the transformers model and is not yet applied to the GGUF the Space runs.
-- Not done yet: injection corpus against the real model, a second person scoring brief quality, a reliability report, a demo video, CUDA on the Space (the code supports it; it did not run on the GPU there).
-- The LoRA and closed-form results above are on synthetic tasks, one run each, 80 tasks scored once. Both fail an instruction that does not name the JSON fields (0/40 for the LoRA). Production keeps the fixed instruction and the grammar, so this case does not occur there.
-- The Space runs the scored LoRA GGUF; the llama.cpp check used seeds 200 to 211, which are tuning data, so it shows the GGUF matches the safetensors result, not new held-out accuracy.
+- The weight-edit gains are on synthetic tasks, without a JSON grammar, from one greedy run each. In production the agent uses a grammar and retries, so the gain there is probably smaller. The 16,384-value plan edit does not make drafts valid without a grammar; the LoRA does.
+- Not done yet: injection corpus against the real model, a second person scoring brief quality, a reliability report, a general-capability regression check of the LoRA, a demo video that matches round 2, CUDA on the Space (the code supports it; it did not run on the GPU there).
+- The LoRA results are on synthetic tasks from one generator, 80 tasks scored once per round. The first LoRA failed an instruction that did not name the JSON fields (0/40); round 2 fixed that. Dev wordings were written in the same session as the training wordings, so dev was optimistic; the fresh-seed score is the clean number.
+- The Space runs the round 2 GGUF; its llama.cpp check used unspent seeds 500 to 511 plus a held-out wording. The real-data test used one dataset and was not run on the Space.
 - Synthetic data only. Nothing is uploaded, and the source file is never modified.
 
 ## Run it
