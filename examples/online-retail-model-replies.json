@@ -1,0 +1,14 @@
+[
+ {
+  "call": 0,
+  "constrained": false,
+  "seconds": 4.5,
+  "reply": "{\n  \"steps\": [\n    {\n      \"item_key\": \"return_rate|2011-W48|region=france,product=high_price,channel=registered\",\n      \"tool\": \"named_query\",\n      \"args\": {\n        \"name\": \"by_segment\",\n        \"params\": {\n          \"metric\": \"return_rate\",\n          \"segment_col\": \"region\",\n          \"period\": \"2011-W48\"\n        }\n      }\n    },\n    {\n      \"item_key\": \"return_rate|2011-W48|region=france,product=low_price,channel=registered\",\n      \"tool\": \"named_query\",\n      \"args\": {\n        \"name\": \"by_segment\",\n        \"params\": {\n          \"metric\": \"return_rate\",\n          \"segment_col\": \"region\",\n          \"period\": \"2011-W48\"\n        }\n      }\n    },\n    {\n      \"item_key\": \"return_rate|2011-W48|region=france,product=mid_price,channel=registered\",\n      \"tool\": \"named_query\",\n      \"args\": {\n        \"name\": \"by_segment\",\n        \"params\": {\n          \"metric\": \"return_rate\",\n          \"segment_col\": \"region\",\n          \"period\": \"2011-W48\"\n        }\n      }\n    }\n  ]\n}"
+ },
+ {
+  "call": 1,
+  "constrained": false,
+  "seconds": 3.1,
+  "reply": "{\n  \"headline\": \"Return rate moved up led by france high price\",\n  \"recommended_action\": \"Review the affected segments with the owning team\",\n  \"findings\": [\n    {\n      \"item_key\": \"return_rate|2011-W48|region=france,product=high_price,channel=registered\",\n      \"so_what\": \"Return rate moved up in france high price\",\n      \"metric_refs\": [\n        \"return_rate\"\n      ]\n    },\n    {\n      \"item_key\": \"return_rate|2011-W48|region=france,product=low_price,channel=registered\",\n      \"so_what\": \"Return rate moved up in france low price\",\n      \"metric_refs\": [\n        \"return_rate\"\n      ]\n    },\n    {\n      \"item_key\": \"return_rate|2011-W48|region=france,product=mid_price,channel=registered\",\n      \"so_what\": \"Return rate moved up in france mid price\",\n      \"metric_refs\": [\n        \"return_rate\"\n      ]\n    }\n  ],\n  \"caveats\": []\n}"
+ }
+]

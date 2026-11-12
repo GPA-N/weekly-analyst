@@ -90,7 +90,13 @@ The Space now runs `lora3` (as an f16 GGUF, `MiniCPM-V-4_7-1B-weekly-analyst-lor
 
 ### A first real-data test
 
-We ran the real pipeline on the UCI Online Retail sheet (about 540,000 invoice rows, converted to our weekly CSV; registered or guest customers as the channel, cancellation invoices as returns) with the `lora3` GGUF on a T4 and the model output unconstrained. The model wrote a valid plan and draft each time. The pipeline halted on all three weeks because of a bug in our own code: the attribution rows showed a segment's contribution to the change, but the independent number check recomputes the segment's own change and refuses segments with fewer than 30 rows. We now show each segment's own change and leave out segments below that size (`attribution_rows` in `src/weekly_analyst/systems/report_findings.py`, covered by two unit tests in `tests/test_report_attribution.py` of the GitHub repo). After the fix, all three weeks produced a full report. This is one dataset, one run per week, not a quality score. An earlier try on the Tableau Superstore sample stayed silent because its segments were far below the size minimum.
+We ran the real pipeline on the UCI Online Retail sheet (about 540,000 invoice rows, converted to our weekly CSV; registered or guest customers as the channel, cancellation invoices as returns) with the `lora3` GGUF on a T4 and the model output unconstrained. The model wrote a valid plan and draft each time. The pipeline halted on all three weeks because of a bug in our own code: the attribution rows showed a segment's contribution to the change, but the independent number check recomputes the segment's own change and refuses segments with fewer than 30 rows. We now show each segment's own change and leave out segments below that size (`attribution_rows` in `src/weekly_analyst/systems/report_findings.py`, covered by two unit tests in `tests/test_report_attribution.py` of the GitHub repo). After the fix, all three weeks produced a full report. This is one dataset, one run per week, not a quality score.
+
+Example output for the week of 2011-12-04 (ISO week 2011-W48), made with `scripts/online_retail_to_csv.py` and the `lora3` GGUF, model output unconstrained: [report PDF](examples/online-retail-2011-w48.pdf) and the model's two raw replies, plan and draft ([JSON](examples/online-retail-model-replies.json)). The draft is formulaic ("Return rate moved up in france high price", the same sentence shape for each segment); the numbers in the report come from code and were recomputed, not from the model. It shows that the format and the checks hold on real data, not that the analysis is insightful.
+
+| ![page 1](examples/online-retail-p1.png) | ![page 2](examples/online-retail-p2.png) | ![page 3](examples/online-retail-p3.png) |
+|---|---|---|
+ An earlier try on the Tableau Superstore sample stayed silent because its segments were far below the size minimum.
 
 ## Honest limits
 
