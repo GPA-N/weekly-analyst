@@ -262,6 +262,15 @@ instructions (the unedited model: 0/40 on each). Speed and memory were measured 
 adopted: 48 of 50 valid plans, 4 to 9 times longer replies.
 Set `WEEKLY_ANALYST_LORA=0` for the older 16,384-value plan edit.
 
+### Round 2 benchmark (scored once, no grammar, greedy; 40 tasks per variant)
+| | Plans | Drafts | Renamed data | Repair line | One item | Reword | Reword b (no field names) | Reword c |
+|---|---|---|---|---|---|---|---|---|
+| Unedited model | 65/80 | 0/80 | 0/40 | 0/40 | 0/40 | 0/40 | 0/40 | 0/40 |
+| First LoRA | 80/80 | 80/80 | 40/40 | 40/40 | 40/40 | 0/40 | not scored | not scored |
+| **This Space's model (`lora3`)** | **80/80** | **80/80** | 40/40 | 40/40 | 40/40 | 40/40 | 40/40 | 40/40 |
+
+Synthetic tasks from one generator. Reword b and c were never trained on.
+
 ### Honest limits
 - The scenarios on this Space and the reliability figures are synthetic. The one real-data test is described below.
 - For free SQL the unedited 1B model got 21 of 30 questions right under a grammar, short of the 24 of 30 bar, so named,
