@@ -26,12 +26,12 @@ class Failure:
     detail: str
 
 
-def _recomputed(snapshot_path: Path, metric: MetricDef, shown: ShownNumber) -> float | None:
+def _recomputed(snapshot_path: Path, metric: MetricDef, shown: ShownNumber, date_column: str) -> float | None:
     """The value a shown number must match: its level, or the signed change from prev_period to period."""
-    now = recompute(snapshot_path, metric, shown.segment, shown.period)
+    now = recompute(snapshot_path, metric, shown.segment, shown.period, date_column)
     if shown.prev_period is None:
         return now
-    before = recompute(snapshot_path, metric, shown.segment, shown.prev_period)
+    before = recompute(snapshot_path, metric, shown.segment, shown.prev_period, date_column)
     if now is None or before is None:
         return None
     return now - before
@@ -59,7 +59,7 @@ def check_report(
             failures.append(Failure("no_metric", f"{shown.text!r} names no known metric {shown.metric!r}"))
             continue
         try:
-            value = _recomputed(snapshot_path, metric, shown)
+            value = _recomputed(snapshot_path, metric, shown, metrics.date_column)
             matched = value is not None and matches_displayed(value, shown.text)
         except ValueError as err:
             failures.append(Failure("wrong_number", f"{shown.text!r} cannot be verified: {err}"))

@@ -272,7 +272,7 @@ Set `WEEKLY_ANALYST_LORA=0` for the older 16,384-value plan edit.
 Synthetic tasks from one generator. Reword b and c were never trained on.
 
 ### Honest limits
-- The scenarios on this Space and the reliability figures are synthetic. The one real-data test is described below.
+- The scenarios on this Space and the reliability figures are synthetic. The real-data tests are described below.
 - For free SQL the unedited 1B model got 21 of 30 questions right under a grammar, short of the 24 of 30 bar, so named,
   parameterized queries are the main path and free SQL is a last resort. That was measured before the LoRA; free SQL
   was not re-measured with the LoRA model this Space runs.
@@ -281,8 +281,10 @@ Synthetic tasks from one generator. Reword b and c were never trained on.
 - The change detector's recall on the holdout replay is 0.21 (the bar was 0.80), and 14% of quiet weeks raised an alert.
 - The LoRA and weight-edit scores are synthetic, from one task generator, scored once. A first real-data test (the UCI Online
   Retail sheet, about 540,000 invoice rows, run on a T4 and not on this Space) gave a valid plan and draft each time, and
-  after we fixed a bug in our own number check the pipeline produced a full report for 3 of 3 weeks. Nothing has been
-  measured for general capabilities beyond the agent's task.
+  after we fixed a bug in our own number check the pipeline produced a full report for 3 of 3 weeks. A second workbook
+  (Online Retail II, 525,461 lines) produced a full report for 4 of 4 weeks after we fixed three more bugs of ours: a
+  misleading error for a raw .xlsx, a crash when the work folder did not exist, and a hard-coded `date` column name.
+  The agent still reads CSV only. Nothing has been measured for general capabilities beyond the agent's task.
 """
 
 with gr.Blocks(title="Weekly Analyst") as demo_app:
@@ -308,10 +310,10 @@ with gr.Blocks(title="Weekly Analyst") as demo_app:
     with gr.Tab("Example reports (already run)"):
         gr.Markdown(
             "The first two reports (synthetic data) were produced by this same code with the real model and the earlier "
-            "plan edit, on a 2-core CPU, then approved with the real approve command. The third is real public data "
-            "(UCI Online Retail, week of 2011-12-04) made with the current LoRA model on a T4; its draft text is formulaic."
+            "plan edit, on a 2-core CPU, then approved with the real approve command. The last two are real public Excel data "
+            "(UCI Online Retail, week of 2011-12-04, and Online Retail II, 2010-W47) made with the current LoRA model on a T4; their draft text is formulaic."
         )
-        for prefix, title in (("drop", "Sales drop"), ("spike", "Sales spike"), ("online-retail", "Real data: Online Retail, 2011-W48")):
+        for prefix, title in (("drop", "Sales drop"), ("spike", "Sales spike"), ("online-retail", "Real data: Online Retail, 2011-W48"), ("online-retail-ii", "Real data: Online Retail II, 2010-W47")):
             pages, pdf = example_files(prefix)
             gr.Markdown(f"#### {title}")
             gr.Gallery(value=pages, label=title, columns=3, height=420, object_fit="contain")

@@ -1,0 +1,71 @@
+{
+ "note": "The model's raw replies for the week 2010-W47 (cut 2010-11-28), lora3 GGUF, T4, no JSON schema or grammar. plan = first reply, draft = second.",
+ "plan": {
+  "steps": [
+   {
+    "item_key": "return_rate|2010-W47|Country=EIRE,CustomerType=registered",
+    "tool": "named_query",
+    "args": {
+     "name": "by_segment",
+     "params": {
+      "metric": "return_rate",
+      "segment_col": "Country",
+      "period": "2010-W47"
+     }
+    }
+   },
+   {
+    "item_key": "return_rate|2010-W47|Country=Germany,CustomerType=registered",
+    "tool": "named_query",
+    "args": {
+     "name": "by_segment",
+     "params": {
+      "metric": "return_rate",
+      "segment_col": "Country",
+      "period": "2010-W47"
+     }
+    }
+   },
+   {
+    "item_key": "revenue|2010-W47|Country=EIRE,CustomerType=registered",
+    "tool": "named_query",
+    "args": {
+     "name": "by_segment",
+     "params": {
+      "metric": "revenue",
+      "segment_col": "Country",
+      "period": "2010-W47"
+     }
+    }
+   }
+  ]
+ },
+ "draft": {
+  "headline": "Return rate moved up led by EIRE registered",
+  "recommended_action": "Review the affected segments with the owning team",
+  "findings": [
+   {
+    "item_key": "return_rate|2010-W47|Country=EIRE,CustomerType=registered",
+    "so_what": "Return rate moved up in EIRE registered",
+    "metric_refs": [
+     "return_rate"
+    ]
+   },
+   {
+    "item_key": "return_rate|2010-W47|Country=Germany,CustomerType=registered",
+    "so_what": "Return rate moved down in Germany registered",
+    "metric_refs": [
+     "return_rate"
+    ]
+   },
+   {
+    "item_key": "revenue|2010-W47|Country=EIRE,CustomerType=registered",
+    "so_what": "Revenue moved down in EIRE registered",
+    "metric_refs": [
+     "revenue"
+    ]
+   }
+  ],
+  "caveats": []
+ }
+}

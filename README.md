@@ -37,7 +37,7 @@ MiniCPM-V 4.7 1B (f16) runs locally through llama.cpp. It selects tools and para
 | Real model, quiet week | silent in about 1 s |
 | Real model, spike or drop week | PDF draft in about 195 s on a 2-vCPU Colab, about 5 min on the Space; approve re-renders, re-checks and writes it to the sent folder |
 | Peak memory | 5.2 GB |
-| Test suite (full project) | 656 passed, 2 skipped, 0 failed on 2026-11-12 (658 collected; includes 2 new tests for the number-check fix) |
+| Test suite (full project) | 659 passed, 2 skipped, 0 failed on 2026-11-13 (includes 5 new tests for bugs found on real data) |
 | First weight edit (16,384 values, no training; superseded by the LoRA), held-out plans, 80 tasks, no grammar | 64/80 to 80/80; a random edit of the same size stayed at 64/80 |
 | Small LoRA, round 2 (`lora3`), scored once on held-out seeds 400 to 439 (deployed on the Space) | plans 80/80, drafts 80/80 and 40/40 on each of six variants without a grammar, including two held-out reworded instructions (unedited model: 65/80, 0/80, 0/40 each) |
 | First real-data test (UCI Online Retail, about 540,000 invoice rows, T4, model output unconstrained) | valid plan and draft each time; after we fixed a bug in our own number check, a full report for 3 of 3 weeks (it halted on all 3 before the fix) |
@@ -98,6 +98,19 @@ Example output for the week of 2011-12-04 (ISO week 2011-W48), made with `script
 |---|---|---|
  An earlier try on the Tableau Superstore sample stayed silent because its segments were far below the size minimum.
 
+### A second real Excel file (UCI Online Retail II, 2026-11-13)
+
+We pointed the app at a second real workbook, the UCI Online Retail II sheet for 2009-2010 (525,461 invoice lines, 53 weeks), on a T4 with `lora3` and unconstrained model calls. It found three bugs of ours, now fixed and covered by tests:
+
+- A raw `.xlsx` halted with "file is not valid UTF-8". It now says the file is an Excel workbook and must be exported as CSV first.
+- A first run crashed with `unable to open database file` when the work folder did not exist yet. The store now creates it.
+- Our number check and the model-path calculation looked for a column literally named `date` and ignored `date_column` from the metrics file. All four weeks failed until we fixed it. After the fix, 4 of 4 weeks produced a full report.
+
+I recomputed the headline numbers of one report from the CSV and they match the PDF exactly. The draft text is as formulaic as before. Details: [results/real-excel-online-retail-ii.md](results/real-excel-online-retail-ii.md). Example: [report PDF](examples/online-retail-ii-2010-w47.pdf), the [model's replies](examples/online-retail-ii-model-replies.json), the converter `scripts/online_retail_ii_to_csv.py` and the metrics file `examples/metrics_online_retail_ii.yaml`.
+
+| ![page 1](examples/online-retail-ii-p1.png) | ![page 2](examples/online-retail-ii-p2.png) | ![page 3](examples/online-retail-ii-p3.png) |
+|---|---|---|
+
 ## Honest limits
 
 - Detection: recall 0.21 on the holdout replay at the quiet gate (the bar was 0.80), and 14% of quiet weeks raised an alert. We know why, we have not fixed it.
@@ -105,13 +118,13 @@ Example output for the week of 2011-12-04 (ISO week 2011-W48), made with `script
 - All scores are on synthetic tasks from one generator, without a JSON grammar, greedy, 80 tasks scored once per round. In production the agent uses a grammar and retries, so the real gain is probably smaller. The first LoRA failed an instruction that did not name the JSON fields (0/40); round 2 fixed that. Dev wordings were written in the same session as the training wordings, so dev was optimistic; the fresh-seed score is the clean number.
 - The Space runs the round 2 GGUF; its llama.cpp check used unspent seeds 500 to 511 plus a held-out wording. The real-data test used one dataset and was not run on the Space.
 - Free SQL: the unedited model got 21 of 30 under a grammar (bar 24), so named queries are the main path. This was not re-measured with the LoRA.
-- Real data: one public dataset (UCI Online Retail). The draft text there is formulaic; the numbers come from checked code. The product reads CSV only, so an Excel sheet must be converted first (`scripts/online_retail_to_csv.py` is one example).
+- Real data: two public datasets (UCI Online Retail and Online Retail II). The draft text there is formulaic; the numbers come from checked code. The product reads CSV only, so an Excel sheet must be converted first (`scripts/online_retail_to_csv.py` is one example).
 - Chart reading by the vision encoder is not claimed (the vision projector would not load in the runtime used). CPU only on the Space; Apple Silicon speed is untested.
 - The scenarios on the Space are synthetic. Nothing is uploaded, and the source file is never modified.
 
 ## Run the tests
 
-The full test suite is in `tests/` of the GitHub repo (with `eval/` and `pyproject.toml`): `pip install -e ".[dev]" && pytest`. It uses a stand-in model, not the real one, and takes about 10 minutes on a 12-core machine when split across processes (about 25 minutes in one process). On 2026-11-12: 656 passed, 2 skipped, 0 failed.
+The full test suite is in `tests/` of the GitHub repo (with `eval/` and `pyproject.toml`): `pip install -e ".[dev]" && pytest`. It uses a stand-in model, not the real one, and takes about 10 minutes on a 12-core machine when split across processes (about 25 minutes in one process). On 2026-11-13: 659 passed, 2 skipped, 0 failed.
 
 ## Run it
 

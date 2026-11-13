@@ -20,6 +20,7 @@ log = logging.getLogger(__name__)
 
 ISO_DATE = re.compile(r"[0-9]{4}-[0-9]{2}-[0-9]{2}")
 CHUNK_BYTES = 1 << 20
+WORKBOOK_MAGIC = (b"PK\x03\x04", b"\xd0\xcf\x11\xe0")  # .xlsx (zip) and old .xls (OLE)
 
 
 class ExtractError(Exception):
@@ -51,6 +52,9 @@ def _hash_and_check_utf8(csv_path: Path) -> str:
     digest = hashlib.sha256()
     decoder = codecs.getincrementaldecoder("utf-8")()
     with open(csv_path, "rb") as fh:
+        if fh.read(4) in WORKBOOK_MAGIC:
+            raise _halt("not_csv", "this is an Excel workbook, not a CSV; export the sheet as CSV (UTF-8) first", 0, "unknown")
+        fh.seek(0)
         for chunk in iter(lambda: fh.read(CHUNK_BYTES), b""):
             digest.update(chunk)
             try:

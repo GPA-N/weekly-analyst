@@ -14,14 +14,14 @@ DATE_COLUMN = "date"
 
 
 def compute(
-    df: pl.DataFrame, m: MetricDef, segment: dict[str, str] | None, period: str
+    df: pl.DataFrame, m: MetricDef, segment: dict[str, str] | None, period: str, date_column: str = DATE_COLUMN
 ) -> float | None:
     """Value of metric m for one ISO week (e.g. "2026-W46") and segment.
 
     Returns None when the slice has fewer rows than Settings().min_rows_per_segment,
     or when there are no non-null values to aggregate.
     """
-    predicate = pl.col(DATE_COLUMN).cast(pl.Date).dt.strftime("%G-W%V") == period
+    predicate = pl.col(date_column).cast(pl.Date).dt.strftime("%G-W%V") == period
     for key, value in (segment or {}).items():
         predicate = predicate & (pl.col(key) == value)
     rows = df.filter(predicate)

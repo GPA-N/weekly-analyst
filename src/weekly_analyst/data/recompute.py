@@ -41,12 +41,14 @@ def _parse_period(period: str) -> tuple[int, int]:
     return int(match.group(1)), int(match.group(2))
 
 
-def recompute(snapshot_path: Path, m: MetricDef, segment: dict[str, str] | None, period: str) -> float | None:
+def recompute(
+    snapshot_path: Path, m: MetricDef, segment: dict[str, str] | None, period: str, date_column: str = DATE_COLUMN
+) -> float | None:
     year, week = _parse_period(period)
     segment = segment or {}
-    table = pq.read_table(snapshot_path, columns=[DATE_COLUMN, m.column, *segment])
+    table = pq.read_table(snapshot_path, columns=[date_column, m.column, *segment])
 
-    dates = pc.cast(table[DATE_COLUMN], pa.date32())
+    dates = pc.cast(table[date_column], pa.date32())
     mask = pc.and_(pc.equal(pc.iso_year(dates), year), pc.equal(pc.iso_week(dates), week))
     for key, value in segment.items():
         mask = pc.and_(mask, pc.equal(pc.cast(table[key], pa.string()), value))

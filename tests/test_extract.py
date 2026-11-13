@@ -182,6 +182,16 @@ def test_non_utf8_is_rejected_as_bad_encoding(dirs, metrics):
     assert exc.value.code == "bad_encoding"
 
 
+def test_excel_workbook_is_rejected_with_a_clear_reason(dirs, metrics):
+    source, out = dirs
+    for magic in (b"PK\x03\x04", b"\xd0\xcf\x11\xe0"):
+        path = source / "sales.csv"
+        path.write_bytes(magic + b"junk")
+        with pytest.raises(ExtractError) as exc:
+            extract(path, metrics, out, Settings())
+        assert exc.value.code == "not_csv" and "Excel workbook" in str(exc.value)
+
+
 def test_metric_column_missing_from_source_is_left_out(dirs, metrics):
     source, out = dirs
     header = "date,region,product,channel,units,revenue,discount"

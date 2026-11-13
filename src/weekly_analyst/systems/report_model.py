@@ -80,8 +80,8 @@ def _kpis(ctx: RunContext, df: pl.DataFrame, period: str, prev: str, items: list
     by_name = metric_map(ctx)
     for name in dict.fromkeys(item.metric for item in items):
         metric = by_name[name]
-        now = compute(df, metric, None, period)
-        before = compute(df, metric, None, prev)
+        now = compute(df, metric, None, period, ctx.metrics.date_column)
+        before = compute(df, metric, None, prev, ctx.metrics.date_column)
         if now is None or before is None:
             continue
         kpis.append(

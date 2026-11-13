@@ -1,0 +1,32 @@
+date_column: InvoiceDate
+metrics:
+  - name: revenue
+    definition: Sum of Quantity times Price in the period, in pounds.
+    owner: Retail analytics
+    inclusions: All invoice lines with a date.
+    exclusions: Lines with no quantity or price.
+    column: Revenue
+    agg: sum
+    segment_columns: [Country, CustomerType]
+    min_change: 0.05
+    version: 1
+  - name: units
+    definition: Absolute quantity of items on invoice lines in the period.
+    owner: Retail analytics
+    inclusions: All invoice lines with a date.
+    exclusions: Lines with no quantity.
+    column: Units
+    agg: sum
+    segment_columns: [Country, CustomerType]
+    min_change: 0.05
+    version: 1
+  - name: return_rate
+    definition: Share of invoice lines on cancellation invoices.
+    owner: Customer operations
+    inclusions: All invoice lines.
+    exclusions: None.
+    column: Returned
+    agg: mean
+    segment_columns: [Country, CustomerType]
+    min_change: 0.01
+    version: 1

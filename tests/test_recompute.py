@@ -131,3 +131,17 @@ def test_recompute_imports_no_polars_duckdb_pandas_or_metrics_calc():
     banned = ("polars", "duckdb", "pandas", "weekly_analyst.data.metrics_calc")
     hits = sorted(n for n in names for b in banned if n == b or n.startswith(b + "."))
     assert hits == []
+
+
+def test_recompute_and_compute_use_the_metrics_file_date_column(tmp_path):
+    import polars as pl
+
+    from weekly_analyst.data.metrics_calc import compute
+
+    df = pl.DataFrame(
+        {"InvoiceDate": [date(2026, 1, 5) + timedelta(days=i % 7) for i in range(40)], "Revenue": [float(i) for i in range(40)]}
+    )
+    path = tmp_path / "snap.parquet"
+    df.write_parquet(path)
+    m = load_metrics_file(FIXTURE).metrics[0].model_copy(update={"column": "Revenue", "agg": "sum", "segment_columns": []})
+    assert recompute(path, m, None, "2026-W02", "InvoiceDate") == compute(df, m, None, "2026-W02", "InvoiceDate") == float(sum(range(40)))

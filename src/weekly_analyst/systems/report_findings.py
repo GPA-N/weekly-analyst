@@ -23,7 +23,7 @@ def finding_for(ctx: RunContext, df: pl.DataFrame, item: Item, text) -> tuple[Fi
     shown = public_item(item)  # what the report prints
     label = segment_label(dict(shown.segment))
     key = plan_item_key(shown)
-    level = compute(df, metric, segment, item.period)
+    level = compute(df, metric, segment, item.period, ctx.metrics.date_column)
     if level is None:
         raise Halt(f"{key}: too few rows to report")
     points = series(ctx, df, metric, segment)
@@ -66,7 +66,7 @@ def attribution_rows(df: pl.DataFrame, date_col: str, metric, col: str, period: 
     rows = []
     for r in attribute_change(week(df, date_col, prev), week(df, date_col, period), metric, col).iter_rows(named=True):
         segment = {col: str(r["segment"])}
-        now, before = compute(df, metric, segment, period), compute(df, metric, segment, prev)
+        now, before = compute(df, metric, segment, period, date_col), compute(df, metric, segment, prev, date_col)
         if now is not None and before is not None:
             rows.append(AttributionRow(segment=sanitize.label(str(r["segment"])), change=ShownNumber(change_text(now - before), metric.name, segment, period)))
     return rows
@@ -76,7 +76,7 @@ def series(ctx: RunContext, df: pl.DataFrame, metric, segment: dict) -> list[tup
     periods = df.select(period_expr(ctx.metrics.date_column).unique().sort()).to_series().to_list()
     points = []
     for period in periods[-SAMPLE_WEEKS:]:
-        value = compute(df, metric, segment, period)
+        value = compute(df, metric, segment, period, ctx.metrics.date_column)
         if value is not None:
             points.append((period, "W" + period.split("-W", 1)[1], value))
     return points

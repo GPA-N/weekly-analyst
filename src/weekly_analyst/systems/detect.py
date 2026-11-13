@@ -52,8 +52,8 @@ class DetectSystem(System):
 def _abs_change(ctx: RunContext, df, item: Item, prev: str) -> float:
     metric = metric_map(ctx)[item.metric]
     segment = dict(item.segment)
-    now = compute(df, metric, segment, item.period)
-    before = compute(df, metric, segment, prev)
+    now = compute(df, metric, segment, item.period, ctx.metrics.date_column)
+    before = compute(df, metric, segment, prev, ctx.metrics.date_column)
     if now is None or before is None:
         return math.nan  # a NaN change fails the minimum-change gate
     return abs(now - before)

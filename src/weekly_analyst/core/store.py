@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS runs (
 class StateStore:
     def __init__(self, path: Path) -> None:
         self._path = Path(path)
+        self._path.parent.mkdir(parents=True, exist_ok=True)  # a first run has no work folder yet
         with self._transaction() as conn:
             conn.executescript(_SCHEMA)
 

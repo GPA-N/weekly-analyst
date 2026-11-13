@@ -41,3 +41,10 @@ def test_every_shown_change_can_be_recomputed_from_the_slice():
     for row in attribution_rows(df, "date", _metric("sum"), "region", NOW):
         now, before = compute(df, _metric("sum"), row.change.segment, NOW), compute(df, _metric("sum"), row.change.segment, PREV)
         assert row.change.text == change_text(now - before)
+
+
+def test_state_store_creates_a_missing_work_folder(tmp_path):
+    from weekly_analyst.core.store import StateStore
+
+    StateStore(tmp_path / "does" / "not" / "exist" / "state.db")
+    assert (tmp_path / "does" / "not" / "exist" / "state.db").exists()

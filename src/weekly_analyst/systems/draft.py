@@ -38,8 +38,8 @@ def _direction(df, ctx: RunContext, item) -> str:
     """up, down or unchanged for the item's metric against the prior week: words only, no numbers for the model."""
     metric = metric_map(ctx)[item.metric]
     segment = dict(item.segment)
-    now = compute(df, metric, segment, item.period)
-    before = compute(df, metric, segment, prev_period(item.period))
+    now = compute(df, metric, segment, item.period, ctx.metrics.date_column)
+    before = compute(df, metric, segment, prev_period(item.period), ctx.metrics.date_column)
     if now is None or before is None:
         return "unknown"
     return "up" if now > before else "down" if now < before else "unchanged"
