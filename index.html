@@ -18,8 +18,8 @@
     and a person approves the send. The small model does what it is good at: choosing the analysis and writing the words around the evidence.</p>
     <p><a class="btn" href="https://huggingface.co/spaces/ewin-reg/weekly-analyst">Try the live demo</a>
     <a class="btn" href="https://github.com/GPA-N/weekly-analyst">Code on GitHub</a>
-    <a class="btn" href="https://huggingface.co/ewin-reg/MiniCPM-V-4.7-1B-weekly-analyst-edit">Edited model</a></p>
-    <p class="chips"><span>MiniCPM-V 4.7 1B, f16 (no quantization)</span><span>llama.cpp, CPU only</span><span>read-only on the source</span><span>a person approves before anything is sent</span></p>
+    <a class="btn" href="https://huggingface.co/ewin-reg/MiniCPM-V-4.7-1B-weekly-analyst-edit">Model on Hugging Face</a></p>
+    <p class="chips"><span>MiniCPM-V 4.7 1B, f16 (no quantization) plus a small LoRA</span><span>llama.cpp, CPU only</span><span>read-only on the source</span><span>a person approves before anything is sent</span></p>
   </div>
 </header>
 
@@ -93,10 +93,10 @@
       <tr><td>One model step on CPU</td><td>about 4.8 tokens/s, plan about 20 s, draft about 17 s</td><td>2-core CPU, peak memory 5.2 GB (bar: under 12 GB)</td></tr>
       <tr><td>Full run on CPU</td><td>about 195 s for a report, about 1 s when quiet</td><td>3 scenarios, real model, real approve (bar: under 20 minutes)</td></tr>
       <tr><td>Free SQL written by the unedited 1B model</td><td>21 of 30 with a grammar, 18 of 30 without</td><td>short of the 24 of 30 bar, so named queries are the main path and free SQL is a last resort. Measured before the LoRA; not re-measured with <code>lora3</code></td></tr>
-      <tr><td>Fine-tuned variant</td><td>not adopted</td><td>48 of 50 valid plans against 50 of 50, 4 to 9 times longer replies, 4 to 6 points lower on math and reading questions that are unlike its training data (inside the error bars)</td></tr>
+      <tr><td>Earlier full gradient fine-tune (not the LoRA)</td><td>not adopted</td><td>48 of 50 valid plans against 50 of 50, 4 to 9 times longer replies, 4 to 6 points lower on math and reading questions that are unlike its training data (inside the error bars)</td></tr>
       <tr><td>Injection attempts in data</td><td>62 of 62 contained</td><td>replayed against a stand-in model that obeys them; not yet repeated with the real model</td></tr>
       <tr><td>Automated tests</td><td>656 passing, 2 skipped, 0 failing (2026-11-12)</td><td>unit, security and end-to-end tests with a stand-in model; includes 2 new tests for the number-check fix</td></tr>
-      <tr><td>Weight edit (16,384 values, no training)</td><td>plans 64/80 to 80/80</td><td>80 held-out synthetic tasks, no grammar; a random edit of the same size stayed at 64/80; drafts stayed 0/80 without a grammar</td></tr>
+      <tr><td>First weight edit (16,384 values, no training; superseded by the LoRA)</td><td>plans 64/80 to 80/80</td><td>80 held-out synthetic tasks, no grammar; a random edit of the same size stayed at 64/80; drafts stayed 0/80 without a grammar</td></tr>
       <tr><td>Live Space, spike scenario</td><td>draft in about 296 s, approve in about 24 s</td><td>real model with <code>lora3</code> on the Space CPU, checked on 2026-11-12</td></tr>
       <tr><td>Small LoRA, round 2 (<code>lora3</code>), scored once on held-out seeds 400 to 439 (deployed on the Space)</td><td>plans 80/80, drafts 80/80, 40/40 on each of six variants</td><td>no grammar, greedy. Base 65/80, 0/80 and 0/40 on each variant. The variants include two held-out reworded instructions, one without field names. Synthetic tasks from one generator. The first LoRA failed an instruction without field names (0/40); round 2 fixed it with more training wordings. A closed-form edit fixed that wording on dev but dropped plans to 12/40</td></tr>
       <tr><td>First real-data test (UCI Online Retail, about 540,000 invoice rows)</td><td>valid plan and draft each time; full report for 3 of 3 weeks after a fix</td><td>T4, model output unconstrained. <a href="examples/online-retail-2011-w48.pdf">Example report (PDF)</a>, <a href="examples/online-retail-model-replies.json">the model's raw replies</a>; the draft text is formulaic, the numbers come from checked code. The pipeline halted on all 3 weeks until we fixed a bug in our own number check (it showed a segment's contribution but the check recomputes its own change, and it refuses segments under 30 rows). One dataset, one run per week, not a quality score</td></tr>
@@ -140,7 +140,7 @@
       <tr><td>The converted edited GGUF would not load in llama-cpp-python 0.3.36</td><td>Ship the edit as a patch on the official GGUF, verified equal to the converted file on the edited tensors.</td></tr>
       <tr><td>Space repo cap is 1 GB, the model is 2 GB</td><td>Download the official GGUF at start and patch a copy.</td></tr>
       <tr><td>ZeroGPU killed the run ("GPU task aborted") and 192 reported CPUs thrashed llama.cpp</td><td>Run on CPU outside the GPU time cap, threads capped at 8, one tiny GPU function so the Space starts.</td></tr>
-      <tr><td>Drafts scored 0/80 without a grammar and the first edit did not help</td><td>Printed raw outputs: the schema is not in the prompt. Direction edits stayed at 0/40; a closed-form MEMIT-style edit reached 80/80 held-out drafts (75/80 on fresh seeds with the plan edit).</td></tr>
+      <tr><td>Drafts scored 0/80 without a grammar and the first edit did not help</td><td>Printed raw outputs: the schema is not in the prompt. Direction edits stayed at 0/40; a closed-form edit reached 80/80 held-out drafts but failed on a reworded instruction. A LoRA trained on many wordings fixed both (80/80, and 40/40 on each variant).</td></tr>
       <tr><td>Gradio Spaces could not be created by API on a free account (402)</td><td>Created in the web UI, updated through the API.</td></tr>
     </tbody>
   </table>
