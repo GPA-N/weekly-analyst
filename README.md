@@ -64,7 +64,7 @@ Method and limits are in the [model card](https://huggingface.co/ewin-reg/MiniCP
 | Colab VMs died during long runs and took results with them (twice) | Long jobs run detached and push every result to a private Hugging Face dataset; a lost VM costs one trial. |
 | A plain weight edit did nothing (alpha 1); strong or wide edits broke the model (0/40 plans) | Searched strength and width on dev seeds; the working edit is narrow (8 columns, 2 layers, alpha 6), then validated once on held-out tasks against a random-direction control. |
 | The converted edited GGUF would not load in llama-cpp-python 0.3.36 | Ship the edit as a patch on the official GGUF and verify it matches the converted file on the edited tensors. |
-| The Space repo has a 1 GB cap and the model is 2 GB | The app downloads the official GGUF at start and patches a copy. |
+| The Space repo has a 1 GB cap and the model is 2 GB | The app downloads our ready-made `lora3` GGUF from the model repo at start (the first edit was a patch applied to the official GGUF at start). |
 | ZeroGPU Space: the agent run was killed with "GPU task aborted" and the host reported 192 CPUs, which thrashed llama.cpp (545 s) | The agent runs on CPU outside the GPU time cap with threads capped at 8; one tiny `@spaces.GPU` function stays so the Space starts. |
 | Gradio Spaces could not be created through the API on a free account (402) | The Space was created in the web UI and updated through the API. |
 | Drafts scored 0/80 without a grammar and the first edit did not help | Found by printing raw outputs: the draft prompt never shows the schema, so the model invents keys. Direction add/flip edits stayed at 0/40; a MEMIT-style closed-form edit fitted at the wrong JSON positions reached 80/80 held-out drafts (fresh seeds: 75/80 with the plan edit). |
@@ -116,7 +116,7 @@ The full test suite is in `tests/` of the GitHub repo (with `eval/` and `pyproje
 
 ## Run it
 
-`pip install -r requirements.txt && python app.py`, or open the Space. With CUDA: `requirements.cuda.txt`. The first run downloads the 2 GB f16 GGUF from `openbmb/MiniCPM-V-4.7-1B-gguf`.
+`pip install -r requirements.txt && python app.py`, or open the Space. With CUDA: `requirements.cuda.txt`. The first run downloads our 2 GB `lora3` f16 GGUF (`MiniCPM-V-4_7-1B-weekly-analyst-lora3-F16.gguf`) from `ewin-reg/MiniCPM-V-4.7-1B-weekly-analyst-edit`. With `WEEKLY_ANALYST_LORA=0` it downloads the official GGUF from `openbmb/MiniCPM-V-4.7-1B-gguf` and applies the old 16,384-value patch; with `WEEKLY_ANALYST_EDIT=0` it uses the official file unchanged.
 
 ## Layout
 
