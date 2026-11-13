@@ -171,7 +171,7 @@ def run_scenario(label: str):
             elapsed = int(time.perf_counter() - started)
             yield (
                 f"Running the nine states on CPU ({elapsed} s). The first run also downloads the 2 GB model. "
-                "A report takes about 3 to 4 minutes.",
+                "A report takes about 5 minutes on this CPU.",
                 [],
                 None,
                 "",
