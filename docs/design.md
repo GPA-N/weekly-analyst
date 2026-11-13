@@ -1,5 +1,8 @@
 # Autonomous Analyst Agent: Design
 
+> Status note (2026-11-13): this is the design written on 2026-11-09. The model it names as the default, the official GGUF, was later replaced by our `lora3` GGUF (see the README). The rest describes the agent's design and still holds.
+
+
 Working title: **Weekly Analyst** (the name is my call).
 Date: 2026-11-09. Revision 4. Status: draft for approval.
 
