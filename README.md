@@ -105,7 +105,10 @@ Example output for the week of 2011-12-04 (ISO week 2011-W48), made with `script
 - Not done yet: injection corpus against the real model, a second person scoring brief quality, a reliability report, a general-capability regression check of the LoRA, CUDA on the Space (the code supports it; it did not run on the GPU there).
 - The LoRA results are on synthetic tasks from one generator, 80 tasks scored once per round. The first LoRA failed an instruction that did not name the JSON fields (0/40); round 2 fixed that. Dev wordings were written in the same session as the training wordings, so dev was optimistic; the fresh-seed score is the clean number.
 - The Space runs the round 2 GGUF; its llama.cpp check used unspent seeds 500 to 511 plus a held-out wording. The real-data test used one dataset and was not run on the Space.
-- Synthetic data only. Nothing is uploaded, and the source file is never modified.
+- Free SQL: the unedited model got 21 of 30 under a grammar (bar 24), so named queries are the main path. This was not re-measured with the LoRA.
+- Real data: one public dataset (UCI Online Retail). The draft text there is formulaic; the numbers come from checked code. The product reads CSV only, so an Excel sheet must be converted first (`scripts/online_retail_to_csv.py` is one example).
+- Chart reading by the vision encoder is not claimed (the vision projector would not load in the runtime used). CPU only on the Space; Apple Silicon speed is untested.
+- The scenarios on the Space are synthetic. Nothing is uploaded, and the source file is never modified.
 
 ## Run the tests
 
